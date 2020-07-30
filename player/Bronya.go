@@ -22,9 +22,8 @@ func (b *BronyaZaychik) RoundAttack(defender Player, round uint16) {
 		//defender.DirectTakeDamage(50)
 		return
 	}
+	defender.TakeDamage(b.Attack)
 	if b.Rand(25) {
 		defender.TakeDamage(4 * 12)
-	} else {
-		defender.TakeDamage(b.Attack)
 	}
 }
