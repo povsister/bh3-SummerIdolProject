@@ -42,3 +42,8 @@ func (s *SeeleVollerei) TakeDamage(damage int16) {
 		s.Health -= trueDamage
 	}
 }
+
+func (s *SeeleVollerei) Reset() {
+	s.idol.Reset()
+	s.current = WhiteSeele
+}
