@@ -10,14 +10,14 @@ import (
 
 const (
 	matches = 10000
-	arenas  = 10
+	arenas  = 100
 )
 
 func main() {
 	resultChan := make(chan *arena.MatchResult, matches*arenas)
 	var wg sync.WaitGroup
 	for i := 1; i <= arenas; i++ {
-		match := arena.NewMatch(&wg, player.Bronya, player.Sakura)
+		match := arena.NewMatch(&wg, player.Bronya, player.Seele)
 		match.SetMatchTimes(matches)
 		wg.Add(1)
 		go match.StartMatch(resultChan)

@@ -2,7 +2,6 @@ package player
 
 import (
 	"math/rand"
-	"time"
 )
 
 type Player interface {
@@ -41,7 +40,7 @@ func (i *idol) DirectTakeDamage(damage int16) {
 }
 
 func (i *idol) Rand(thresh int) bool {
-	rand.Seed(time.Now().UnixNano())
+	//rand.Seed(time.Now().UnixNano())
 	return thresh-1 <= rand.Intn(100)
 }
 
@@ -120,7 +119,7 @@ var Players = map[Candidate]Player{
 		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10},
 	},
 	Seele: &SeeleVollerei{
-		idol{Seele, `希儿`, 100, 23, 13, 26},
+		idol{Seele, `希儿`, 100, 23, 13, 26}, WhiteSeele,
 	},
 	Durandal: &BiankaAtaegina{
 		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15},
