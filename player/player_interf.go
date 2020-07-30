@@ -1,8 +1,16 @@
 package player
 
+import (
+	"math/rand"
+	"time"
+)
+
 type Player interface {
 	RoundAttack(Player, uint16)
+	TakeDamage(int16)
+	DirectTakeDamage(int16)
 	DeepCopy() Player
+	IdolName() string
 	Attributes() *idol
 	IsDead() bool
 	Reset()
@@ -19,6 +27,26 @@ type idol struct {
 
 func (i *idol) RoundAttack(player Player, round uint16) {
 	panic(`not implemented`)
+}
+
+func (i *idol) TakeDamage(damage int16) {
+	trueDamage := damage - i.Defence
+	if trueDamage >= 0 {
+		i.Health -= trueDamage
+	}
+}
+
+func (i *idol) DirectTakeDamage(damage int16) {
+	i.Health -= damage
+}
+
+func (i *idol) Rand(thresh int) bool {
+	rand.Seed(time.Now().UnixNano())
+	return thresh-1 <= rand.Intn(100)
+}
+
+func (i *idol) IdolName() string {
+	return i.Name
 }
 
 func (i *idol) DeepCopy() Player {

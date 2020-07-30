@@ -1,6 +1,8 @@
 package arena
 
 import (
+	"sync"
+
 	"povsister.app/bh3/summer-idol/player"
 )
 
@@ -9,6 +11,7 @@ type arena struct {
 	Rivals        [2]player.Player
 	simulateTimes int   // simulate times of a single match
 	lastAttack    uint8 // log the player who attacked last round
+	wg            *sync.WaitGroup
 }
 
 type MatchResult struct {
@@ -16,12 +19,15 @@ type MatchResult struct {
 	Winner player.Candidate
 }
 
-func NewMatch(rivals ...player.Player) *arena {
+func NewMatch(wg *sync.WaitGroup, rivals ...player.Candidate) *arena {
 	if len(rivals) != 2 {
 		panic(`rivals must be a pair`)
 	}
 	return &arena{
-		1, [2]player.Player{rivals[0], rivals[1]}, 1000, 0,
+		1, [2]player.Player{
+			player.Players[rivals[0]].DeepCopy(),
+			player.Players[rivals[1]].DeepCopy(),
+		}, 1000, 0, wg,
 	}
 }
 
@@ -30,6 +36,7 @@ func (a *arena) SetMatchTimes(times int) {
 }
 
 func (a *arena) StartMatch(ch chan *MatchResult) {
+	defer a.wg.Done()
 	var attacker, defender player.Player
 	var result *MatchResult
 	for i := 1; i <= a.simulateTimes; i++ {
