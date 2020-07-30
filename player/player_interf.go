@@ -111,7 +111,7 @@ const (
 
 var Players = map[Candidate]Player{
 	Kiana: &KianaKaslana{
-		idol{Kiana, `琪亚娜`, 100, 24, 11, 23, nil},
+		idol{Kiana, `琪亚娜`, 100, 24, 11, 23, nil}, false,
 	},
 	Mei: &RaidenMei{
 		idol{Mei, `芽衣`, 100, 22, 12, 30, nil},
