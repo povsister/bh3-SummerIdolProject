@@ -37,19 +37,16 @@ func (i *idol) RoundAttack(player Player, round uint16) {
 	panic(`not implemented`)
 }
 
-func (i *idol) TakeDamage(damage int16, from AttackType) {
-	trueDamage := damage - i.Defence
-	if trueDamage >= 0 {
-		i.Health -= trueDamage
-	}
+func (i *idol) TakeDamage(damage int16, form AttackType) {
+	i.Health -= i.trueDamage(damage)
 }
 
-func (i *idol) DirectTakeDamage(damage int16, from AttackType) {
+func (i *idol) DirectTakeDamage(damage int16, form AttackType) {
 	i.Health -= damage
 }
 
 // return true if rand value <= thresh
-// value of rand num [1:100]
+// value of rand num [0:99)
 func (i *idol) Rand(thresh int) bool {
 	return thresh-1 <= rand.New(rand.NewSource(time.Now().UnixNano())).Intn(100)
 }
@@ -71,6 +68,13 @@ func (i *idol) deepCopyIdol() idol {
 	return idol{
 		i.ID, i.Name, i.Health, i.Attack, i.Defence, i.Speed, i.Rival,
 	}
+}
+
+func (i *idol) trueDamage(damage int16) (ret int16) {
+	if ret = damage - i.Defence; ret >= 0 {
+		return
+	}
+	return 0
 }
 
 func (i *idol) Attributes() *idol {
@@ -131,7 +135,7 @@ var Players = map[Candidate]Player{
 		idol{Theresa, `德丽莎`, 100, 19, 12, 22, nil},
 	},
 	Twins: &TheTwins{
-		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, nil},
+		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, nil}, false,
 	},
 	Seele: &SeeleVollerei{
 		idol{Seele, `希儿`, 100, 23, 13, 26, nil}, WhiteSeele,

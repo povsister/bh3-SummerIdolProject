@@ -29,7 +29,7 @@ func (s *SeeleVollerei) RoundAttack(defender Player, round uint16) {
 	}
 }
 
-func (s *SeeleVollerei) TakeDamage(damage int16, from AttackType) {
+func (s *SeeleVollerei) TakeDamage(damage int16, form AttackType) {
 	var trueDamage int16
 	if s.current == WhiteSeele {
 		trueDamage = damage - (s.Defence)
