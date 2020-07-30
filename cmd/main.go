@@ -14,7 +14,7 @@ const (
 )
 
 func main() {
-	resultChan := make(chan *arena.MatchResult, 10000)
+	resultChan := make(chan *arena.MatchResult, matches*arenas)
 	var wg sync.WaitGroup
 	for i := 1; i <= arenas; i++ {
 		match := arena.NewMatch(&wg, player.Bronya, player.Sakura)
