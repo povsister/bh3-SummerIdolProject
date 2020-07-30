@@ -11,12 +11,12 @@ func (s *YaeSakura) DeepCopy() Player {
 }
 
 func (s *YaeSakura) RoundAttack(defender Player, round uint16) {
-	if s.Rand(35) {
-		s.Health += 30
+	if s.Rand(30) {
+		s.Health += 25
 	}
 	if round%2 == 0 {
-		defender.DirectTakeDamage(25)
+		defender.DirectTakeDamage(25, Unique)
 	} else {
-		defender.TakeDamage(s.Attack)
+		defender.TakeDamage(s.Attack, Normal)
 	}
 }

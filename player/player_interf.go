@@ -7,8 +7,8 @@ import (
 
 type Player interface {
 	RoundAttack(Player, uint16)
-	TakeDamage(int16)
-	DirectTakeDamage(int16)
+	TakeDamage(int16, AttackType)
+	DirectTakeDamage(int16, AttackType)
 	DeepCopy() Player
 	IdolName() string
 	Attributes() *idol
@@ -23,20 +23,28 @@ type idol struct {
 	Attack  int16
 	Defence int16
 	Speed   int16
+	Rival   Player
 }
+
+type AttackType uint8
+
+const (
+	Normal AttackType = iota
+	Unique
+)
 
 func (i *idol) RoundAttack(player Player, round uint16) {
 	panic(`not implemented`)
 }
 
-func (i *idol) TakeDamage(damage int16) {
+func (i *idol) TakeDamage(damage int16, from AttackType) {
 	trueDamage := damage - i.Defence
 	if trueDamage >= 0 {
 		i.Health -= trueDamage
 	}
 }
 
-func (i *idol) DirectTakeDamage(damage int16) {
+func (i *idol) DirectTakeDamage(damage int16, from AttackType) {
 	i.Health -= damage
 }
 
@@ -61,7 +69,7 @@ func (i *idol) DeepCopy() Player {
 
 func (i *idol) deepCopyIdol() idol {
 	return idol{
-		i.ID, i.Name, i.Health, i.Attack, i.Defence, i.Speed,
+		i.ID, i.Name, i.Health, i.Attack, i.Defence, i.Speed, i.Rival,
 	}
 }
 
@@ -99,39 +107,39 @@ const (
 
 var Players = map[Candidate]Player{
 	Kiana: &KianaKaslana{
-		idol{Kiana, `琪亚娜`, 100, 24, 11, 23},
+		idol{Kiana, `琪亚娜`, 100, 24, 11, 23, nil},
 	},
 	Mei: &RaidenMei{
-		idol{Mei, `芽衣`, 100, 22, 12, 30},
+		idol{Mei, `芽衣`, 100, 22, 12, 30, nil},
 	},
 	Bronya: &BronyaZaychik{
-		idol{Bronya, `布洛妮娅`, 100, 21, 10, 20},
+		idol{Bronya, `布洛妮娅`, 100, 21, 10, 20, nil},
 	},
 	Himeko: &MurataHimeko{
-		idol{Himeko, `姬子`, 100, 23, 9, 12},
+		idol{Himeko, `姬子`, 100, 23, 9, 12, nil},
 	},
 	Rita: &RitaRossweisse{
-		idol{Rita, `丽塔`, 100, 26, 11, 17},
+		idol{Rita, `丽塔`, 100, 26, 11, 17, nil},
 	},
 	Sakura: &YaeSakura{
-		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18},
+		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18, nil},
 	},
 	Raven: &TheRaven{
-		idol{Raven, `渡鸦`, 100, 23, 14, 14},
+		idol{Raven, `渡鸦`, 100, 23, 14, 14, nil},
 	},
 	Theresa: &TheresaApocalypse{
-		idol{Theresa, `德丽莎`, 100, 19, 12, 22},
+		idol{Theresa, `德丽莎`, 100, 19, 12, 22, nil},
 	},
 	Twins: &TheTwins{
-		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10},
+		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, nil},
 	},
 	Seele: &SeeleVollerei{
-		idol{Seele, `希儿`, 100, 23, 13, 26}, WhiteSeele,
+		idol{Seele, `希儿`, 100, 23, 13, 26, nil}, WhiteSeele,
 	},
 	Durandal: &BiankaAtaegina{
-		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15},
+		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15, nil},
 	},
 	Fuka: &FuHua{
-		idol{Fuka, `符华`, 100, 17, 15, 16},
+		idol{Fuka, `符华`, 100, 17, 15, 16, nil},
 	},
 }

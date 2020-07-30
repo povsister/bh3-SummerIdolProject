@@ -39,6 +39,8 @@ func (a *arena) StartMatch(ch chan *MatchResult) {
 	defer a.wg.Done()
 	var attacker, defender player.Player
 	var result *MatchResult
+	a.Rivals[0].Attributes().Rival = a.Rivals[1]
+	a.Rivals[1].Attributes().Rival = a.Rivals[0]
 	for i := 1; i <= a.simulateTimes; i++ {
 		for {
 			// must call attacker first

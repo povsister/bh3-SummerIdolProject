@@ -21,15 +21,15 @@ func (s *SeeleVollerei) DeepCopy() Player {
 func (s *SeeleVollerei) RoundAttack(defender Player, round uint16) {
 	if s.current == WhiteSeele {
 		s.current = BlackSeele
-		defender.TakeDamage(s.Attack + 10)
+		defender.TakeDamage(s.Attack+10, Normal)
 	} else {
 		s.Health += s.RandNum(15)
 		s.current = WhiteSeele
-		defender.TakeDamage(s.Attack)
+		defender.TakeDamage(s.Attack, Normal)
 	}
 }
 
-func (s *SeeleVollerei) TakeDamage(damage int16) {
+func (s *SeeleVollerei) TakeDamage(damage int16, from AttackType) {
 	var trueDamage int16
 	if s.current == WhiteSeele {
 		trueDamage = damage - (s.Defence)
