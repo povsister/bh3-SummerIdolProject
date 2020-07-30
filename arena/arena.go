@@ -93,7 +93,8 @@ func (a *arena) Reset() {
 	a.Round = 1
 }
 
-// return a player who should attack at current round
+// return a player who should attack first
+// with a pointer cache trick
 func (a *arena) attacker() player.Player {
 	if a.firstAttack != nil {
 		return a.Rivals[*a.firstAttack]
@@ -109,7 +110,7 @@ func (a *arena) attacker() player.Player {
 	return a.Rivals[1]
 }
 
-// return a player who should defend at current round
+// return a player who should defend
 func (a *arena) defender() player.Player {
 	return a.Rivals[1-*a.firstAttack]
 }

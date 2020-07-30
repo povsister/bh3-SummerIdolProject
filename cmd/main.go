@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	matches = 10000
-	arenas  = 100
+	matches = 5000
+	arenas  = 200
 )
 
 func main() {

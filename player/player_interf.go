@@ -2,6 +2,7 @@ package player
 
 import (
 	"math/rand"
+	"time"
 )
 
 type Player interface {
@@ -39,9 +40,15 @@ func (i *idol) DirectTakeDamage(damage int16) {
 	i.Health -= damage
 }
 
+// return true if rand value <= thresh
+// value of rand num [1:100]
 func (i *idol) Rand(thresh int) bool {
-	//rand.Seed(time.Now().UnixNano())
-	return thresh-1 <= rand.Intn(100)
+	return thresh-1 <= rand.New(rand.NewSource(time.Now().UnixNano())).Intn(100)
+}
+
+// return a random number from [1:upper]
+func (i *idol) RandNum(upper int) int16 {
+	return int16(rand.New(rand.NewSource(time.Now().UnixNano())).Intn(upper) + 1)
 }
 
 func (i *idol) IdolName() string {

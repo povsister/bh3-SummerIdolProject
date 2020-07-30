@@ -1,7 +1,5 @@
 package player
 
-import "math/rand"
-
 type SeeleType int
 
 const (
@@ -25,7 +23,7 @@ func (s *SeeleVollerei) RoundAttack(defender Player, round uint16) {
 		s.current = BlackSeele
 		defender.TakeDamage(s.Attack + 10)
 	} else {
-		s.Health += int16(rand.Intn(15) + 1)
+		s.Health += s.RandNum(15)
 		s.current = WhiteSeele
 		defender.TakeDamage(s.Attack)
 	}
