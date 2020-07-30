@@ -8,13 +8,17 @@ import (
 	"povsister.app/bh3/summer-idol/player"
 )
 
+const (
+	matches = 10000
+	arenas  = 10
+)
+
 func main() {
 	resultChan := make(chan *arena.MatchResult, 10000)
 	var wg sync.WaitGroup
-
-	for i := 1; i <= 30; i++ {
+	for i := 1; i <= arenas; i++ {
 		match := arena.NewMatch(&wg, player.Bronya, player.Sakura)
-		match.SetMatchTimes(10000)
+		match.SetMatchTimes(matches)
 		wg.Add(1)
 		go match.StartMatch(resultChan)
 	}
