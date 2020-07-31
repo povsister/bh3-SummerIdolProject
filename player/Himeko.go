@@ -34,6 +34,8 @@ func (h *MurataHimeko) RoundAttack(round uint16) {
 	if h.Rand(h.Accuracy) {
 		log.Print("%s 普攻 造成 %d 点伤害", h.Name, h.getRealDamage(h.Attack))
 		h.Rival.DirectTakeDamage(round, h.getRealDamage(h.Attack), 1, Normal)
+	} else {
+		log.Print("%s 普攻 未能命中", h.Name)
 	}
 }
 
