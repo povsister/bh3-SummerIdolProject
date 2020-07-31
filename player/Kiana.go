@@ -2,7 +2,6 @@ package player
 
 type KianaKaslana struct {
 	idol
-	stunned bool
 }
 
 func (k *KianaKaslana) DeepCopy() Player {
@@ -24,9 +23,4 @@ func (k *KianaKaslana) RoundAttack(round uint16) {
 	} else {
 		k.Rival.TakeDamage(k.Attack, Normal)
 	}
-}
-
-func (k *KianaKaslana) Reset() {
-	k.idol.Reset()
-	k.stunned = false
 }

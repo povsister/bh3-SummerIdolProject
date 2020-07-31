@@ -11,6 +11,18 @@ type Player interface {
 	Reset()
 }
 
+type idolStatus struct {
+	stunned   bool
+	paralyzed bool
+	frozen    bool
+}
+
+var defaultIdolStatus = idolStatus{
+	stunned:   false,
+	paralyzed: false,
+	frozen:    false,
+}
+
 type idol struct {
 	ID      Candidate
 	Name    string
@@ -19,6 +31,7 @@ type idol struct {
 	Defence int16
 	Speed   int16
 	Rival   Player
+	idolStatus
 }
 
 type AttackType uint8
@@ -61,7 +74,8 @@ func (i *idol) DeepCopy() Player {
 
 func (i *idol) deepCopyIdol() idol {
 	return idol{
-		i.ID, i.Name, i.Health, i.Attack, i.Defence, i.Speed, i.Rival,
+		i.ID, i.Name, i.Health, i.Attack, i.Defence,
+		i.Speed, i.Rival, idolStatus{false, false, false},
 	}
 }
 
@@ -85,6 +99,9 @@ func (i *idol) Reset() {
 	i.Attack = Players[i.ID].Attributes().Attack
 	i.Defence = Players[i.ID].Attributes().Defence
 	i.Speed = Players[i.ID].Attributes().Speed
+	i.idolStatus.stunned = false
+	i.idolStatus.frozen = false
+	i.idolStatus.paralyzed = false
 }
 
 type Candidate uint8
@@ -106,39 +123,39 @@ const (
 
 var Players = map[Candidate]Player{
 	Kiana: &KianaKaslana{
-		idol{Kiana, `琪亚娜`, 100, 24, 11, 23, nil}, false,
+		idol{Kiana, `琪亚娜`, 100, 24, 11, 23, nil, defaultIdolStatus},
 	},
 	Mei: &RaidenMei{
-		idol{Mei, `芽衣`, 100, 22, 12, 30, nil},
+		idol{Mei, `芽衣`, 100, 22, 12, 30, nil, defaultIdolStatus},
 	},
 	Bronya: &BronyaZaychik{
-		idol{Bronya, `布洛妮娅`, 100, 21, 10, 20, nil},
+		idol{Bronya, `布洛妮娅`, 100, 21, 10, 20, nil, defaultIdolStatus},
 	},
 	Himeko: &MurataHimeko{
-		idol{Himeko, `姬子`, 100, 23, 9, 12, nil},
+		idol{Himeko, `姬子`, 100, 23, 9, 12, nil, defaultIdolStatus},
 	},
 	Rita: &RitaRossweisse{
-		idol{Rita, `丽塔`, 100, 26, 11, 17, nil},
+		idol{Rita, `丽塔`, 100, 26, 11, 17, nil, defaultIdolStatus},
 	},
 	Sakura: &YaeSakura{
-		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18, nil},
+		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18, nil, defaultIdolStatus},
 	},
 	Raven: &TheRaven{
-		idol{Raven, `渡鸦`, 100, 23, 14, 14, nil},
+		idol{Raven, `渡鸦`, 100, 23, 14, 14, nil, defaultIdolStatus},
 	},
 	Theresa: &TheresaApocalypse{
-		idol{Theresa, `德丽莎`, 100, 19, 12, 22, nil},
+		idol{Theresa, `德丽莎`, 100, 19, 12, 22, nil, defaultIdolStatus},
 	},
 	Twins: &TheTwins{
-		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, nil}, false,
+		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, nil, defaultIdolStatus}, false,
 	},
 	Seele: &SeeleVollerei{
-		idol{Seele, `希儿`, 100, 23, 13, 26, nil}, WhiteSeele,
+		idol{Seele, `希儿`, 100, 23, 13, 26, nil, defaultIdolStatus}, WhiteSeele,
 	},
 	Durandal: &BiankaAtaegina{
-		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15, nil},
+		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15, nil, defaultIdolStatus},
 	},
 	Fuka: &FuHua{
-		idol{Fuka, `符华`, 100, 17, 15, 16, nil},
+		idol{Fuka, `符华`, 100, 17, 15, 16, nil, defaultIdolStatus},
 	},
 }
