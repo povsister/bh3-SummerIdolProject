@@ -31,8 +31,8 @@ func main() {
 	table.Header = &st.Header{
 		Cells: []*st.Cell{
 			{Text: `对战双方`, Align: st.AlignLeft},
-			{Text: `结果1`, Align: st.AlignLeft},
-			{Text: `结果2`, Align: st.AlignLeft},
+			{Text: `结果1(获胜)`, Align: st.AlignLeft},
+			{Text: `结果2(获胜)`, Align: st.AlignLeft},
 		},
 	}
 	table.SetStyle(st.StyleMarkdown)

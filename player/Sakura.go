@@ -18,8 +18,8 @@ func (s *YaeSakura) RoundAttack(round uint16) {
 		s.Health += 25
 	}
 	if round%2 == 0 {
-		s.Rival.DirectTakeDamage(round, 25, Unique)
+		s.Rival.DirectTakeDamage(round, 25, 1, Unique)
 	} else {
-		s.Rival.TakeDamage(round, s.Attack, Normal)
+		s.Rival.TakeDamage(round, s.Attack, 1, Normal)
 	}
 }

@@ -15,21 +15,25 @@ func (f *FuHua) RoundAttack(round uint16) {
 		return
 	}
 	if round%3 == 0 {
-		f.Rival.DirectTakeDamage(round, 18, Unique)
+		f.Rival.DirectTakeDamage(round, 18, 1, Unique)
 		return
 	}
-	f.Rival.DirectTakeDamage(round, f.Attack, Normal)
+	f.Rival.DirectTakeDamage(round, f.Attack, 1, Normal)
 }
 
-func (f *FuHua) TakeDamage(round uint16, damage int16, form AttackType) {
-	if f.isHit(round) {
-		f.Health -= f.trueDamage(damage)
+func (f *FuHua) TakeDamage(round uint16, damage int16, times uint8, form AttackType) {
+	for k := 0; uint8(k) < times; k++ {
+		if f.isHit(round) {
+			f.Health -= f.trueDamage(damage)
+		}
 	}
 }
 
-func (f *FuHua) DirectTakeDamage(round uint16, damage int16, form AttackType) {
-	if f.isHit(round) {
-		f.Health -= damage
+func (f *FuHua) DirectTakeDamage(round uint16, damage int16, times uint8, form AttackType) {
+	for k := 0; uint8(k) < times; k++ {
+		if f.isHit(round) {
+			f.Health -= damage
+		}
 	}
 }
 

@@ -15,12 +15,10 @@ func (r *TheRaven) RoundAttack(round uint16) {
 		return
 	}
 	if round%3 == 0 {
-		for i := 1; i <= 7; i++ {
-			r.Rival.DirectTakeDamage(round, r.finalDamage(r.Rival.Attributes().trueDamage(16)), Unique)
-		}
+		r.Rival.DirectTakeDamage(round, r.finalDamage(r.Rival.Attributes().trueDamage(16)), 7, Unique)
 		return
 	}
-	r.Rival.DirectTakeDamage(round, r.finalDamage(r.Rival.Attributes().trueDamage(r.Attack)), Normal)
+	r.Rival.DirectTakeDamage(round, r.finalDamage(r.Rival.Attributes().trueDamage(r.Attack)), 1, Normal)
 }
 
 func (r *TheRaven) finalDamage(damage int16) int16 {

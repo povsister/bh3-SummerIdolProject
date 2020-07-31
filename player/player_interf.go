@@ -2,8 +2,8 @@ package player
 
 type Player interface {
 	RoundAttack(uint16)
-	TakeDamage(uint16, int16, AttackType)
-	DirectTakeDamage(uint16, int16, AttackType)
+	TakeDamage(round uint16, damage int16, times uint8, form AttackType)
+	DirectTakeDamage(round uint16, damage int16, times uint8, form AttackType)
 	DeepCopy() Player
 	IdolName() string
 	Attributes() *idol
@@ -45,12 +45,27 @@ func (i *idol) RoundAttack(round uint16) {
 	panic(`not implemented`)
 }
 
-func (i *idol) TakeDamage(round uint16, damage int16, form AttackType) {
-	i.Health -= i.trueDamage(damage)
+func (i *idol) TakeDamage(round uint16, damage int16, times uint8, form AttackType) {
+	i.takeDamage(damage, times)
+	//fmt.Printf("%s当前 %d HP\n", i.Name, i.Health)
 }
 
-func (i *idol) DirectTakeDamage(round uint16, damage int16, form AttackType) {
-	i.Health -= damage
+// be noted that this also calculate the impact of defence
+func (i *idol) takeDamage(damage int16, times uint8) {
+	for k := 0; uint8(k) < times; k++ {
+		i.Health -= i.trueDamage(damage)
+	}
+}
+
+func (i *idol) DirectTakeDamage(round uint16, damage int16, times uint8, form AttackType) {
+	i.directTakeDamage(damage, times)
+	//fmt.Printf("%s当前 %d HP\n", i.Name, i.Health)
+}
+
+func (i *idol) directTakeDamage(damage int16, times uint8) {
+	for k := 0; uint8(k) < times; k++ {
+		i.Health -= damage
+	}
 }
 
 // return true if rand value <= thresh
@@ -160,7 +175,7 @@ var Players = map[Candidate]Player{
 		idol{Theresa, `德丽莎`, 100, 19, 12, 22, nil, defaultIdolStatus},
 	},
 	Twins: &TheTwins{
-		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, nil, defaultIdolStatus}, false,
+		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, nil, defaultIdolStatus}, false, false,
 	},
 	Seele: &SeeleVollerei{
 		idol{Seele, `希儿`, 100, 23, 13, 26, nil, defaultIdolStatus}, WhiteSeele,

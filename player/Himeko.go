@@ -21,12 +21,12 @@ func (h *MurataHimeko) RoundAttack(round uint16) {
 	}
 	if round%2 == 0 {
 		if h.Rand(accuracy) {
-			h.Rival.DirectTakeDamage(round, h.getRealDamage(2*h.Attack), Unique)
+			h.Rival.DirectTakeDamage(round, h.getRealDamage(2*h.Attack), 1, Unique)
 		}
 		return
 	}
 	if h.Rand(accuracy) {
-		h.Rival.DirectTakeDamage(round, h.getRealDamage(h.Attack), Normal)
+		h.Rival.DirectTakeDamage(round, h.getRealDamage(h.Attack), 1, Normal)
 	}
 }
 
