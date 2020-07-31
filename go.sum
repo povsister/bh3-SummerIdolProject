@@ -1,0 +1,4 @@
+github.com/alexeyco/simpletable v0.0.0-20200730140406-5bb24159ccfb h1:k4DUpDUiAc2dlZxWWO82kBlKi8EU1kyDwNgu1nNsrhk=
+github.com/alexeyco/simpletable v0.0.0-20200730140406-5bb24159ccfb/go.mod h1:gx4+gp4N5VWqThMIidoUMBNUCT4Pan3J8ETR1ParWUU=
+github.com/mattn/go-runewidth v0.0.9 h1:Lm995f3rfxdpd6TSmuVCHVb/QhupuXlYr8sCI/QdE+0=
+github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=

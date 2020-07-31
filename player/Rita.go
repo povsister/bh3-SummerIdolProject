@@ -30,12 +30,14 @@ func (r *RitaRossweisse) RoundAttack(round uint16) {
 }
 
 func (r *RitaRossweisse) TakeDamage(round uint16, damage int16, times uint8, form AttackType) {
-	switch round % 4 {
-	case 1, 2:
-		if form == Unique {
-			// skill damage do not take effect
-			r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack-r.Defence)
-			return
+	if round > 4 {
+		switch round % 4 {
+		case 1, 2:
+			if form == Unique {
+				// skill damage do not take effect
+				r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack-r.Defence)
+				return
+			}
 		}
 	}
 	for k := 0; uint8(k) < times; k++ {
@@ -44,12 +46,14 @@ func (r *RitaRossweisse) TakeDamage(round uint16, damage int16, times uint8, for
 }
 
 func (r *RitaRossweisse) DirectTakeDamage(round uint16, damage int16, times uint8, form AttackType) {
-	switch round % 4 {
-	case 1, 2:
-		if form == Unique {
-			// skill damage do not take effect
-			r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack)
-			return
+	if round > 4 {
+		switch round % 4 {
+		case 1, 2:
+			if form == Unique {
+				// skill damage do not take effect
+				r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack)
+				return
+			}
 		}
 	}
 	for k := 0; uint8(k) < times; k++ {
