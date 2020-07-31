@@ -18,22 +18,22 @@ func (t *TheTwins) RoundAttack(round uint16) {
 	// Health should only be 20 just after revived
 	if t.revived && t.Health == 20 {
 		if t.Rand(50) {
-			t.Rival.TakeDamage(233, Unique)
+			t.Rival.TakeDamage(round, Unique, 233)
 		} else {
-			t.Rival.TakeDamage(50, Unique)
+			t.Rival.TakeDamage(round, Unique, 50)
 		}
 		return
 	}
 	// normal attack
-	t.Rival.TakeDamage(t.Attack, Normal)
+	t.Rival.TakeDamage(round, Normal, t.Attack)
 }
 
-func (t *TheTwins) TakeDamage(damage int16, form AttackType) {
+func (t *TheTwins) TakeDamage(round uint16, form AttackType, damage int16) {
 	t.Health -= t.trueDamage(damage)
 	t.tryRevive()
 }
 
-func (t *TheTwins) DirectTakeDamage(damage int16, form AttackType) {
+func (t *TheTwins) DirectTakeDamage(round uint16, damage int16, form AttackType) {
 	t.Health -= damage
 	t.tryRevive()
 }
