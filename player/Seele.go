@@ -24,15 +24,15 @@ func (s *SeeleVollerei) RoundAttack(round uint16) {
 	}
 	if s.current == WhiteSeele {
 		s.current = BlackSeele
-		s.Rival.TakeDamage(round, Normal, s.Attack+10)
+		s.Rival.TakeDamage(round, s.Attack+10, Normal)
 	} else {
 		s.Health += s.RandNum(15)
 		s.current = WhiteSeele
-		s.Rival.TakeDamage(round, Normal, s.Attack)
+		s.Rival.TakeDamage(round, s.Attack, Normal)
 	}
 }
 
-func (s *SeeleVollerei) TakeDamage(round uint16, form AttackType, damage int16) {
+func (s *SeeleVollerei) TakeDamage(round uint16, damage int16, form AttackType) {
 	var trueDamage int16
 	if s.current == WhiteSeele {
 		trueDamage = damage - (s.Defence)

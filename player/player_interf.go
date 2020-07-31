@@ -2,7 +2,7 @@ package player
 
 type Player interface {
 	RoundAttack(uint16)
-	TakeDamage(uint16, AttackType, int16)
+	TakeDamage(uint16, int16, AttackType)
 	DirectTakeDamage(uint16, int16, AttackType)
 	DeepCopy() Player
 	IdolName() string
@@ -45,7 +45,7 @@ func (i *idol) RoundAttack(round uint16) {
 	panic(`not implemented`)
 }
 
-func (i *idol) TakeDamage(round uint16, form AttackType, damage int16) {
+func (i *idol) TakeDamage(round uint16, damage int16, form AttackType) {
 	i.Health -= i.trueDamage(damage)
 }
 

@@ -18,10 +18,10 @@ func (b *BronyaZaychik) RoundAttack(round uint16) {
 		b.Rival.DirectTakeDamage(round, b.RandNum(100), Unique)
 		return
 	}
-	b.Rival.TakeDamage(round, Normal, b.Attack)
+	b.Rival.TakeDamage(round, b.Attack, Normal)
 	if b.Rand(25) {
 		for i := 1; i <= 4; i++ {
-			b.Rival.TakeDamage(round, Normal, 12)
+			b.Rival.TakeDamage(round, 12, Normal)
 		}
 	}
 }

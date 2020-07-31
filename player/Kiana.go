@@ -15,11 +15,11 @@ func (k *KianaKaslana) RoundAttack(round uint16) {
 		return
 	}
 	if round%2 == 0 {
-		k.Rival.TakeDamage(round, Unique, k.Attack+2*k.Rival.Attributes().Defence)
+		k.Rival.TakeDamage(round, k.Attack+2*k.Rival.Attributes().Defence, Unique)
 		if k.Rand(35) {
 			k.stunned = true
 		}
 	} else {
-		k.Rival.TakeDamage(round, Normal, k.Attack)
+		k.Rival.TakeDamage(round, k.Attack, Normal)
 	}
 }

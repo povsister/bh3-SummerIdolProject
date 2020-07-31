@@ -23,5 +23,5 @@ func (m *RaidenMei) RoundAttack(round uint16) {
 		}
 		return
 	}
-	m.Rival.TakeDamage(round, Normal, m.Attack)
+	m.Rival.TakeDamage(round, m.Attack, Normal)
 }
