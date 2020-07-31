@@ -1,10 +1,5 @@
 package player
 
-import (
-	"math/rand"
-	"time"
-)
-
 type Player interface {
 	RoundAttack(Player, uint16)
 	TakeDamage(int16, AttackType)
@@ -48,12 +43,12 @@ func (i *idol) DirectTakeDamage(damage int16, form AttackType) {
 // return true if rand value <= thresh
 // value of rand num [0:99)
 func (i *idol) Rand(thresh int) bool {
-	return thresh-1 <= rand.New(rand.NewSource(time.Now().UnixNano())).Intn(100)
+	return (<-Rand % 100) <= (thresh - 1)
 }
 
 // return a random number from [1:upper]
 func (i *idol) RandNum(upper int) int16 {
-	return int16(rand.New(rand.NewSource(time.Now().UnixNano())).Intn(upper) + 1)
+	return int16(<-Rand%upper + 1)
 }
 
 func (i *idol) IdolName() string {

@@ -1,9 +1,8 @@
 package arena
 
 import (
-	"sync"
-
 	"povsister.app/bh3/summer-idol/player"
+	"sync"
 )
 
 type arena struct {
@@ -23,6 +22,7 @@ func NewMatch(wg *sync.WaitGroup, rivals ...player.Candidate) *arena {
 	if len(rivals) != 2 {
 		panic(`rivals must be a pair`)
 	}
+	player.InitRandGenerator()
 	return &arena{
 		1, [2]player.Player{
 			player.Players[rivals[0]].DeepCopy(),
@@ -38,7 +38,6 @@ func (a *arena) SetMatchTimes(times int) {
 func (a *arena) StartMatch(ch chan *MatchResult) {
 	defer a.wg.Done()
 	var attacker, defender player.Player
-	var result *MatchResult
 	a.Rivals[0].Attributes().Rival = a.Rivals[1]
 	a.Rivals[1].Attributes().Rival = a.Rivals[0]
 	for i := 1; i <= a.simulateTimes; i++ {
@@ -48,47 +47,45 @@ func (a *arena) StartMatch(ch chan *MatchResult) {
 			defender = a.defender()
 			// do the attack
 			attacker.RoundAttack(defender, a.Round)
-			if defender.IsDead() {
-				result = &MatchResult{
-					[2]player.Candidate{
-						a.Rivals[0].Attributes().ID,
-						a.Rivals[1].Attributes().ID,
-					},
-					attacker.Attributes().ID,
-				}
-				// reset arena and rivals status
-				a.Reset()
-				a.Rivals[0].Reset()
-				a.Rivals[1].Reset()
+			if a.CheckResult(ch, attacker, defender) {
 				break
 			}
 			// defender alive. Swap the attacker and defender
 			attacker, defender = defender, attacker
 			// do the attack
 			attacker.RoundAttack(defender, a.Round)
-			if defender.IsDead() {
-				result = &MatchResult{
-					[2]player.Candidate{
-						a.Rivals[0].Attributes().ID,
-						a.Rivals[1].Attributes().ID,
-					},
-					attacker.Attributes().ID,
-				}
-				// reset arena and rivals status
-				a.Reset()
-				a.Rivals[0].Reset()
-				a.Rivals[1].Reset()
+			if a.CheckResult(ch, attacker, defender) {
 				break
 			}
 			// no one died, continue to the next round
 			a.NextRound()
 		}
-		ch <- result
 	}
 }
 
 func (a *arena) NextRound() {
 	a.Round += 1
+}
+
+func (a *arena) CheckResult(ch chan *MatchResult, ps ...player.Player) bool {
+	for i, p := range ps {
+		if p.IsDead() {
+			result := &MatchResult{
+				[2]player.Candidate{
+					a.Rivals[0].Attributes().ID,
+					a.Rivals[1].Attributes().ID,
+				},
+				ps[1-i].Attributes().ID,
+			}
+			// reset arena and rivals status
+			a.Reset()
+			a.Rivals[0].Reset()
+			a.Rivals[1].Reset()
+			ch <- result
+			return true
+		}
+	}
+	return false
 }
 
 func (a *arena) Reset() {
