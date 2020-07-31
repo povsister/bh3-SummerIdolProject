@@ -38,12 +38,17 @@ func (f *FuHua) DirectTakeDamage(round uint16, damage int16, times uint8, form A
 }
 
 func (f *FuHua) isHit(round uint16) bool {
-	// enemy has the 75% of accuracy after round 3
+	// enemy has the 75% of accuracy at round 3
 	if round == 3 && f.Speed > f.Rival.Attributes().Speed {
 		return f.Rand(75)
 	}
 	if round > 3 {
-		return f.Rand(75)
+		accuracy := 100 - int(round/3)*25
+		if accuracy > 0 {
+			return f.Rand(accuracy)
+		} else {
+			return false
+		}
 	}
 	return true
 }
