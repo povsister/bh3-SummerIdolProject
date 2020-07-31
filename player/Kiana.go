@@ -11,18 +11,18 @@ func (k *KianaKaslana) DeepCopy() Player {
 	}
 }
 
-func (k *KianaKaslana) RoundAttack(defender Player, round uint16) {
+func (k *KianaKaslana) RoundAttack(round uint16) {
 	if k.stunned {
 		k.stunned = false
 		return
 	}
 	if round%2 == 0 {
-		defender.TakeDamage(k.Attack+2*defender.Attributes().Defence, Unique)
+		k.Rival.TakeDamage(k.Attack+2*k.Rival.Attributes().Defence, Unique)
 		if k.Rand(35) {
 			k.stunned = true
 		}
 	} else {
-		defender.TakeDamage(k.Attack, Normal)
+		k.Rival.TakeDamage(k.Attack, Normal)
 	}
 }
 

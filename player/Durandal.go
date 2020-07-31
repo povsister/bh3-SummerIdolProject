@@ -10,8 +10,8 @@ func (d *BiankaAtaegina) DeepCopy() Player {
 	}
 }
 
-func (d *BiankaAtaegina) RoundAttack(defender Player, round uint16) {
-	defender.TakeDamage(d.Attack+int16(3*round), Normal)
+func (d *BiankaAtaegina) RoundAttack(round uint16) {
+	d.Rival.TakeDamage(d.Attack+int16(3*round), Normal)
 }
 
 func (d *BiankaAtaegina) TakeDamage(damage int16, form AttackType) {

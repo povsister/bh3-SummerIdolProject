@@ -11,18 +11,18 @@ func (t *TheTwins) DeepCopy() Player {
 	}
 }
 
-func (t *TheTwins) RoundAttack(defender Player, round uint16) {
+func (t *TheTwins) RoundAttack(round uint16) {
 	// Health should only be 20 just after revived
 	if t.revived && t.Health == 20 {
 		if t.Rand(50) {
-			defender.TakeDamage(233, Unique)
+			t.Rival.TakeDamage(233, Unique)
 		} else {
-			defender.TakeDamage(50, Unique)
+			t.Rival.TakeDamage(50, Unique)
 		}
 		return
 	}
 	// normal attack
-	defender.TakeDamage(t.Attack, Normal)
+	t.Rival.TakeDamage(t.Attack, Normal)
 }
 
 func (t *TheTwins) TakeDamage(damage int16, form AttackType) {

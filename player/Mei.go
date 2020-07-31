@@ -9,3 +9,7 @@ func (m *RaidenMei) DeepCopy() Player {
 		idol: m.deepCopyIdol(),
 	}
 }
+
+func (m *RaidenMei) RoundAttack(round uint16) {
+
+}

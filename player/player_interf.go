@@ -1,7 +1,7 @@
 package player
 
 type Player interface {
-	RoundAttack(Player, uint16)
+	RoundAttack(uint16)
 	TakeDamage(int16, AttackType)
 	DirectTakeDamage(int16, AttackType)
 	DeepCopy() Player
@@ -28,7 +28,7 @@ const (
 	Unique
 )
 
-func (i *idol) RoundAttack(player Player, round uint16) {
+func (i *idol) RoundAttack(round uint16) {
 	panic(`not implemented`)
 }
 

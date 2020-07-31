@@ -46,14 +46,14 @@ func (a *arena) StartMatch(ch chan *MatchResult) {
 			attacker = a.attacker()
 			defender = a.defender()
 			// do the attack
-			attacker.RoundAttack(defender, a.Round)
+			attacker.RoundAttack(a.Round)
 			if a.CheckResult(ch, attacker, defender) {
 				break
 			}
 			// defender alive. Swap the attacker and defender
 			attacker, defender = defender, attacker
 			// do the attack
-			attacker.RoundAttack(defender, a.Round)
+			attacker.RoundAttack(a.Round)
 			if a.CheckResult(ch, attacker, defender) {
 				break
 			}
