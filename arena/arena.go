@@ -1,6 +1,7 @@
 package arena
 
 import (
+	"povsister.app/bh3/summer-idol/log"
 	"povsister.app/bh3/summer-idol/player"
 	"sync"
 )
@@ -42,12 +43,14 @@ func (a *arena) StartMatch(ch chan *MatchResult) {
 	a.Rivals[1].Attributes().Rival = a.Rivals[0]
 	for i := 1; i <= a.simulateTimes; i++ {
 		for {
+			log.Print("===== 回合 %d 开始 =====", a.Round)
 			// must call attacker first
 			attacker = a.attacker()
 			defender = a.defender()
 			// do the attack
 			attacker.RoundAttack(a.Round)
 			if a.CheckResult(ch, attacker, defender) {
+				log.Print("===== 比赛结束 =====")
 				break
 			}
 			// defender alive. Swap the attacker and defender
@@ -55,8 +58,10 @@ func (a *arena) StartMatch(ch chan *MatchResult) {
 			// do the attack
 			attacker.RoundAttack(a.Round)
 			if a.CheckResult(ch, attacker, defender) {
+				log.Print("===== 比赛结束 =====")
 				break
 			}
+			log.Print("===== 回合 %d 结束 =====", a.Round)
 			// no one died, continue to the next round
 			a.NextRound()
 		}
@@ -77,6 +82,7 @@ func (a *arena) CheckResult(ch chan *MatchResult, ps ...player.Player) bool {
 				},
 				ps[1-i].Attributes().ID,
 			}
+			log.Print("%s 死亡", p.IdolName())
 			// reset arena and rivals status
 			a.Reset()
 			a.Rivals[0].Reset()

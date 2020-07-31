@@ -1,5 +1,7 @@
 package player
 
+import "povsister.app/bh3/summer-idol/log"
+
 type Player interface {
 	RoundAttack(uint16)
 	TakeDamage(round uint16, damage int16, times uint8, form AttackType)
@@ -11,6 +13,7 @@ type Player interface {
 	AffectAttack(round uint16, num int16, form AttackType)
 	AffectDefence(round uint16, num int16, form AttackType)
 	AffectAccuracy(round uint16, num int16, form AttackType)
+	CanUseSkill(round uint16, skillName string) bool
 	IsDead() bool
 	Reset()
 }
@@ -39,8 +42,13 @@ type idol struct {
 	idolStatus
 }
 
+func (i *idol) CanUseSkill(round uint16, skillName string) bool {
+	return true
+}
+
 func (i *idol) AffectHealth(round uint16, num int16, form AttackType) {
 	i.Health += num
+	log.AttributeStatus(i.Name, `生命值`, num)
 }
 
 func (i *idol) AffectAttack(round uint16, num int16, form AttackType) {
@@ -48,6 +56,7 @@ func (i *idol) AffectAttack(round uint16, num int16, form AttackType) {
 	if i.Attack < 0 {
 		i.Attack = 0
 	}
+	log.AttributeStatus(i.Name, `攻击`, num)
 }
 
 func (i *idol) AffectDefence(round uint16, num int16, form AttackType) {
@@ -55,6 +64,7 @@ func (i *idol) AffectDefence(round uint16, num int16, form AttackType) {
 	if i.Defence < 0 {
 		i.Defence = 0
 	}
+	log.AttributeStatus(i.Name, `防御`, num)
 }
 
 func (i *idol) AffectAccuracy(round uint16, num int16, form AttackType) {
@@ -64,6 +74,7 @@ func (i *idol) AffectAccuracy(round uint16, num int16, form AttackType) {
 	} else if i.Accuracy > 100 {
 		i.Accuracy = 100
 	}
+	log.AttributeStatus(i.Name, `命中率`, num)
 }
 
 type AttackType uint8
@@ -79,7 +90,7 @@ func (i *idol) RoundAttack(round uint16) {
 
 func (i *idol) TakeDamage(round uint16, damage int16, times uint8, form AttackType) {
 	i.takeDamage(damage, times)
-	//fmt.Printf("%s当前 %d HP\n", i.Name, i.Health)
+	log.HPStatus(i.Name, i.Health)
 }
 
 // be noted that this also calculate the impact of defence
@@ -91,7 +102,7 @@ func (i *idol) takeDamage(damage int16, times uint8) {
 
 func (i *idol) DirectTakeDamage(round uint16, damage int16, times uint8, form AttackType) {
 	i.directTakeDamage(damage, times)
-	//fmt.Printf("%s当前 %d HP\n", i.Name, i.Health)
+	log.HPStatus(i.Name, i.Health)
 }
 
 func (i *idol) directTakeDamage(damage int16, times uint8) {
