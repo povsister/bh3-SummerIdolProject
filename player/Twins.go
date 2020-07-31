@@ -12,6 +12,9 @@ func (t *TheTwins) DeepCopy() Player {
 }
 
 func (t *TheTwins) RoundAttack(round uint16) {
+	if t.tryRecover() {
+		return
+	}
 	// Health should only be 20 just after revived
 	if t.revived && t.Health == 20 {
 		if t.Rand(50) {

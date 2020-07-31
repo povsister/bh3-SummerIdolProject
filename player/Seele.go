@@ -19,6 +19,9 @@ func (s *SeeleVollerei) DeepCopy() Player {
 }
 
 func (s *SeeleVollerei) RoundAttack(round uint16) {
+	if s.tryRecover() {
+		return
+	}
 	if s.current == WhiteSeele {
 		s.current = BlackSeele
 		s.Rival.TakeDamage(s.Attack+10, Normal)

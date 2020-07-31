@@ -11,6 +11,9 @@ func (d *BiankaAtaegina) DeepCopy() Player {
 }
 
 func (d *BiankaAtaegina) RoundAttack(round uint16) {
+	if d.tryRecover() {
+		return
+	}
 	d.Rival.TakeDamage(d.Attack+int16(3*round), Normal)
 }
 

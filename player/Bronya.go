@@ -11,6 +11,9 @@ func (b *BronyaZaychik) DeepCopy() Player {
 }
 
 func (b *BronyaZaychik) RoundAttack(round uint16) {
+	if b.tryRecover() {
+		return
+	}
 	if round%3 == 0 {
 		b.Rival.DirectTakeDamage(b.RandNum(100), Unique)
 		return

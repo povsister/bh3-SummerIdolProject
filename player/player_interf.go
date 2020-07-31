@@ -86,6 +86,15 @@ func (i *idol) trueDamage(damage int16) (ret int16) {
 	return 0
 }
 
+// return true if recovered from frozen/stunned/paralyzed
+func (i *idol) tryRecover() bool {
+	if i.paralyzed || i.frozen || i.stunned {
+		i.resetStatus()
+		return true
+	}
+	return false
+}
+
 func (i *idol) Attributes() *idol {
 	return i
 }
@@ -94,14 +103,18 @@ func (i *idol) IsDead() bool {
 	return i.Health <= 0
 }
 
+func (i *idol) resetStatus() {
+	i.idolStatus.stunned = false
+	i.idolStatus.frozen = false
+	i.idolStatus.paralyzed = false
+}
+
 func (i *idol) Reset() {
 	i.Health = Players[i.ID].Attributes().Health
 	i.Attack = Players[i.ID].Attributes().Attack
 	i.Defence = Players[i.ID].Attributes().Defence
 	i.Speed = Players[i.ID].Attributes().Speed
-	i.idolStatus.stunned = false
-	i.idolStatus.frozen = false
-	i.idolStatus.paralyzed = false
+	i.resetStatus()
 }
 
 type Candidate uint8

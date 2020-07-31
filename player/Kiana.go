@@ -11,8 +11,7 @@ func (k *KianaKaslana) DeepCopy() Player {
 }
 
 func (k *KianaKaslana) RoundAttack(round uint16) {
-	if k.stunned {
-		k.stunned = false
+	if k.tryRecover() {
 		return
 	}
 	if round%2 == 0 {
