@@ -16,7 +16,7 @@ const (
 
 func main() {
 	var playerSlice []player.Candidate
-	for p, _ := range player.Players {
+	for p := range player.Players {
 		playerSlice = append(playerSlice, p)
 	}
 	table := st.New()

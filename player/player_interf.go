@@ -7,6 +7,10 @@ type Player interface {
 	DeepCopy() Player
 	IdolName() string
 	Attributes() *idol
+	AffectHealth(round uint16, num int16, form AttackType)
+	AffectAttack(round uint16, num int16, form AttackType)
+	AffectDefence(round uint16, num int16, form AttackType)
+	AffectAccuracy(round uint16, num int16, form AttackType)
 	IsDead() bool
 	Reset()
 }
@@ -24,14 +28,42 @@ var defaultIdolStatus = idolStatus{
 }
 
 type idol struct {
-	ID      Candidate
-	Name    string
-	Health  int16
-	Attack  int16
-	Defence int16
-	Speed   int16
-	Rival   Player
+	ID       Candidate
+	Name     string
+	Health   int16
+	Attack   int16
+	Defence  int16
+	Speed    int16
+	Accuracy int16 // 0 - 100  default 100
+	Rival    Player
 	idolStatus
+}
+
+func (i *idol) AffectHealth(round uint16, num int16, form AttackType) {
+	i.Health += num
+}
+
+func (i *idol) AffectAttack(round uint16, num int16, form AttackType) {
+	i.Attack += num
+	if i.Attack < 0 {
+		i.Attack = 0
+	}
+}
+
+func (i *idol) AffectDefence(round uint16, num int16, form AttackType) {
+	i.Defence += num
+	if i.Defence < 0 {
+		i.Defence = 0
+	}
+}
+
+func (i *idol) AffectAccuracy(round uint16, num int16, form AttackType) {
+	i.Accuracy += num
+	if i.Accuracy < 0 {
+		i.Accuracy = 0
+	} else if i.Accuracy > 100 {
+		i.Accuracy = 100
+	}
 }
 
 type AttackType uint8
@@ -70,8 +102,8 @@ func (i *idol) directTakeDamage(damage int16, times uint8) {
 
 // return true if rand value <= thresh
 // value of rand num [0:99)
-func (i *idol) Rand(thresh int) bool {
-	return (<-Rand % 100) <= (thresh - 1)
+func (i *idol) Rand(thresh int16) bool {
+	return (<-Rand % 100) <= int(thresh-1)
 }
 
 // return a random number from [1:upper]
@@ -90,7 +122,7 @@ func (i *idol) DeepCopy() Player {
 func (i *idol) deepCopyIdol() idol {
 	return idol{
 		i.ID, i.Name, i.Health, i.Attack, i.Defence,
-		i.Speed, i.Rival, idolStatus{false, false, false},
+		i.Speed, 100, i.Rival, idolStatus{false, false, false},
 	}
 }
 
@@ -128,6 +160,7 @@ func (i *idol) Reset() {
 	i.Health = Players[i.ID].Attributes().Health
 	i.Attack = Players[i.ID].Attributes().Attack
 	i.Defence = Players[i.ID].Attributes().Defence
+	i.Accuracy = Players[i.ID].Attributes().Accuracy
 	i.Speed = Players[i.ID].Attributes().Speed
 	i.resetStatus()
 }
@@ -151,39 +184,39 @@ const (
 
 var Players = map[Candidate]Player{
 	Kiana: &KianaKaslana{
-		idol{Kiana, `琪亚娜`, 100, 24, 11, 23, nil, defaultIdolStatus},
+		idol{Kiana, `琪亚娜`, 100, 24, 11, 23, 100, nil, defaultIdolStatus},
 	},
 	Mei: &RaidenMei{
-		idol{Mei, `芽衣`, 100, 22, 12, 30, nil, defaultIdolStatus},
+		idol{Mei, `芽衣`, 100, 22, 12, 30, 100, nil, defaultIdolStatus},
 	},
 	Bronya: &BronyaZaychik{
-		idol{Bronya, `布洛妮娅`, 100, 21, 10, 20, nil, defaultIdolStatus},
+		idol{Bronya, `布洛妮娅`, 100, 21, 10, 20, 100, nil, defaultIdolStatus},
 	},
 	Himeko: &MurataHimeko{
-		idol{Himeko, `姬子`, 100, 23, 9, 12, nil, defaultIdolStatus},
+		idol{Himeko, `姬子`, 100, 23, 9, 12, 100, nil, defaultIdolStatus},
 	},
 	Rita: &RitaRossweisse{
-		idol{Rita, `丽塔`, 100, 26, 11, 17, nil, defaultIdolStatus},
+		idol{Rita, `丽塔`, 100, 26, 11, 17, 100, nil, defaultIdolStatus},
 	},
 	Sakura: &YaeSakura{
-		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18, nil, defaultIdolStatus},
+		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18, 100, nil, defaultIdolStatus},
 	},
 	Raven: &TheRaven{
-		idol{Raven, `渡鸦`, 100, 23, 14, 14, nil, defaultIdolStatus},
+		idol{Raven, `渡鸦`, 100, 23, 14, 14, 100, nil, defaultIdolStatus},
 	},
 	Theresa: &TheresaApocalypse{
-		idol{Theresa, `德丽莎`, 100, 19, 12, 22, nil, defaultIdolStatus},
+		idol{Theresa, `德丽莎`, 100, 19, 12, 22, 100, nil, defaultIdolStatus},
 	},
 	Twins: &TheTwins{
-		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, nil, defaultIdolStatus}, false, false,
+		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, 100, nil, defaultIdolStatus}, false, false,
 	},
 	Seele: &SeeleVollerei{
-		idol{Seele, `希儿`, 100, 23, 13, 26, nil, defaultIdolStatus}, WhiteSeele,
+		idol{Seele, `希儿`, 100, 23, 13, 26, 100, nil, defaultIdolStatus}, WhiteSeele,
 	},
 	Durandal: &BiankaAtaegina{
-		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15, nil, defaultIdolStatus},
+		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15, 100, nil, defaultIdolStatus},
 	},
 	Fuka: &FuHua{
-		idol{Fuka, `符华`, 100, 17, 15, 16, nil, defaultIdolStatus},
+		idol{Fuka, `符华`, 100, 17, 15, 16, 100, nil, defaultIdolStatus},
 	},
 }

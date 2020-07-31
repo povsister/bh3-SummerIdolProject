@@ -20,11 +20,10 @@ func (t *TheTwins) RoundAttack(round uint16) {
 	if t.revived && t.charged {
 		if t.Rand(50) {
 			t.Rival.TakeDamage(round, 233, 1, Unique)
-			t.charged = false
 		} else {
 			t.Rival.TakeDamage(round, 50, 1, Unique)
-			t.charged = false
 		}
+		t.charged = false
 		return
 	}
 	// normal attack

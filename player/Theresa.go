@@ -16,18 +16,15 @@ func (t *TheresaApocalypse) RoundAttack(round uint16) {
 	}
 	if round%3 == 0 {
 		t.Rival.TakeDamage(round, 16, 5, Unique)
-		t.tryWeakenRival()
+		t.tryWeakenRival(round, Unique)
 		return
 	}
 	t.Rival.TakeDamage(round, t.Attack, 1, Normal)
-	t.tryWeakenRival()
+	t.tryWeakenRival(round, Normal)
 }
 
-func (t *TheresaApocalypse) tryWeakenRival() {
+func (t *TheresaApocalypse) tryWeakenRival(round uint16, form AttackType) {
 	if t.Rand(30) {
-		t.Rival.Attributes().Defence -= 5
-		if t.Rival.Attributes().Defence < 0 {
-			t.Rival.Attributes().Defence = 0
-		}
+		t.Rival.AffectDefence(round, -5, form)
 	}
 }

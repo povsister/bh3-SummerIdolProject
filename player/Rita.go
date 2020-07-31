@@ -15,15 +15,12 @@ func (r *RitaRossweisse) RoundAttack(round uint16) {
 		return
 	}
 	if round%4 == 0 {
-		r.Rival.Attributes().Health += 4
+		r.Rival.AffectHealth(round, 4, Unique)
 		return
 	}
 	if r.Rand(35) {
 		r.Rival.DirectTakeDamage(round, r.Rival.Attributes().trueDamage(r.Attack)-3, 1, Normal)
-		r.Rival.Attributes().Attack -= 4
-		if r.Rival.Attributes().Attack < 0 {
-			r.Rival.Attributes().Attack = 0
-		}
+		r.Rival.AffectAttack(round, -4, Unique)
 	} else {
 		r.Rival.TakeDamage(round, r.Attack, 1, Normal)
 	}
@@ -67,4 +64,39 @@ func (r *RitaRossweisse) reduceDamage(round uint16, damage int16) int16 {
 		return int16(float64(damage) / 10 * 4)
 	}
 	return damage
+}
+
+func (r *RitaRossweisse) AffectAccuracy(round uint16, num int16, form AttackType) {
+	if round > 4 && (round%4 == 1 || round%4 == 2) && form == Unique {
+		// no effect
+		return
+	}
+	r.Accuracy += num
+	if r.Accuracy < 0 {
+		r.Accuracy = 0
+	} else if r.Accuracy > 100 {
+		r.Accuracy = 100
+	}
+}
+
+func (r *RitaRossweisse) AffectAttack(round uint16, num int16, form AttackType) {
+	if round > 4 && (round%4 == 1 || round%4 == 2) && form == Unique {
+		// no effect
+		return
+	}
+	r.Attack += num
+	if r.Attack < 0 {
+		r.Attack = 0
+	}
+}
+
+func (r *RitaRossweisse) AffectDefence(round uint16, num int16, form AttackType) {
+	if round > 4 && (round%4 == 1 || round%4 == 2) && form == Unique {
+		// no effect
+		return
+	}
+	r.Defence += num
+	if r.Defence < 0 {
+		r.Defence = 0
+	}
 }

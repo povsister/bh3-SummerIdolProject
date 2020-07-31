@@ -15,17 +15,17 @@ func (h *MurataHimeko) RoundAttack(round uint16) {
 		return
 	}
 	// lower 35% accuracy every 2 round
-	accuracy := 100 - int(round/2)*35
-	if accuracy <= 0 {
+	if h.Accuracy <= 0 {
 		return
 	}
 	if round%2 == 0 {
-		if h.Rand(accuracy) {
+		h.AffectAccuracy(round, -35, Unique)
+		if h.Rand(h.Accuracy) {
 			h.Rival.DirectTakeDamage(round, h.getRealDamage(2*h.Attack), 1, Unique)
 		}
 		return
 	}
-	if h.Rand(accuracy) {
+	if h.Rand(h.Accuracy) {
 		h.Rival.DirectTakeDamage(round, h.getRealDamage(h.Attack), 1, Normal)
 	}
 }
