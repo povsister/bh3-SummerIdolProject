@@ -23,9 +23,10 @@ func main() {
 	//		matchPair(p, playerSlice[k])
 	//	}
 	//}
-	matchPair(player.Durandal, player.Twins)
-	matchPair(player.Durandal, player.Kiana)
-	matchPair(player.Kiana, player.Twins)
+	//matchPair(player.Durandal, player.Twins)
+	//matchPair(player.Durandal, player.Kiana)
+	//matchPair(player.Kiana, player.Twins)
+	matchPair(player.Fuka, player.Theresa)
 }
 
 func matchPair(p1, p2 player.Candidate) {
