@@ -48,7 +48,7 @@ func (r *RitaRossweisse) DirectTakeDamage(round uint16, damage int16, times uint
 	case 1, 2:
 		if form == Unique {
 			// skill damage do not take effect
-			r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack-r.Defence)
+			r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack)
 			return
 		}
 	}
