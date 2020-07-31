@@ -60,7 +60,7 @@ func (r *RitaRossweisse) DirectTakeDamage(round uint16, damage int16, times uint
 func (r *RitaRossweisse) reduceDamage(round uint16, damage int16) int16 {
 	if round/4 >= 1 {
 		// damage * 40%
-		return int16(damage / 10 * 4)
+		return int16(float64(damage) / 10 * 4)
 	}
 	return damage
 }
