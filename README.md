@@ -2,6 +2,89 @@
 
 Simulation of the bh3 summer idol battle
 
+## To simulate
+
+1. Open the `cmd/simulate_match.go`
+2. Change the pair of `pair(player.Himeko, player.Rita)`
+3. Build and run `simulate_match.go`
+
+<details><summary><strong>Example: 丽塔 vs 姬子 模拟战 日志</strong></summary>
+<pre>
+===== 回合 1 开始 =====
+丽塔 普攻 造成 17 点伤害
+姬子 当前剩余 83 HP
+姬子 普攻 造成 12 点伤害
+丽塔 当前剩余 88 HP
+===== 回合 1 结束 =====
+===== 回合 2 开始 =====
+丽塔 普攻 造成 17 点伤害
+姬子 当前剩余 66 HP
+姬子 发动技能 干杯,朋友! 造成 35 点伤害
+丽塔 当前剩余 53 HP
+姬子 的命中率下降了 35 点
+===== 回合 2 结束 =====
+===== 回合 3 开始 =====
+丽塔 普攻 造成 17 点伤害
+姬子 当前剩余 49 HP
+姬子 普攻 造成 12 点伤害
+丽塔 当前剩余 41 HP
+===== 回合 3 结束 =====
+===== 回合 4 开始 =====
+丽塔 发动技能 完美心意! 为对方回复 4 HP 并使对方下两个回合进入魅惑状态
+姬子 的生命值上升了 4 点
+姬子 发动技能 干杯,朋友! 造成 35 点伤害
+丽塔 的 完美心意 生效! 姬子 的攻击伤害永久降低百分之60
+丽塔 当前剩余 27 HP
+姬子 的命中率下降了 35 点
+===== 回合 4 结束 =====
+===== 回合 5 开始 =====
+丽塔 普攻 造成 14 点伤害
+姬子 当前剩余 39 HP
+姬子 的攻击下降了 4 点
+===== 回合 5 结束 =====
+===== 回合 6 开始 =====
+丽塔 普攻 造成 17 点伤害
+姬子 当前剩余 22 HP
+丽塔 的 魅惑 生效! 姬子 当前回合无法使用技能 干杯,朋友!
+===== 回合 6 结束 =====
+===== 回合 7 开始 =====
+丽塔 普攻 造成 17 点伤害
+姬子 当前剩余 5 HP
+===== 回合 7 结束 =====
+===== 回合 8 开始 =====
+丽塔 发动技能 完美心意! 为对方回复 4 HP 并使对方下两个回合进入魅惑状态
+姬子 的生命值上升了 4 点
+姬子 发动技能 干杯,朋友! 造成 27 点伤害
+丽塔 的 完美心意 生效! 姬子 的攻击伤害永久降低百分之60
+丽塔 当前剩余 17 HP
+姬子 的命中率下降了 35 点
+===== 回合 8 结束 =====
+===== 回合 9 开始 =====
+丽塔 普攻 造成 17 点伤害
+姬子 当前剩余 -8 HP
+姬子 死亡
+===== 比赛结束 =====
+丽塔 Wins !
+
+Process finished with exit code 0
+</pre></details>
+
+### Available players
+```go
+player.Kiana    // 草履虫
+player.Mei      // 芽衣
+player.Bronya   // 板鸭
+player.Himeko   // 姬子
+player.Rita     // 丽塔
+player.Sakura   // 樱莲组
+player.Raven    // 渡鸦
+player.Theresa  // 德丽莎
+player.Twins    // 双子
+player.Seele    // 希儿
+player.Durandal // 呆鹅组
+player.Fuka     // 符华
+```
+
 ## Battle result reference 
 > Simulate 100000 times for a single battle
 
