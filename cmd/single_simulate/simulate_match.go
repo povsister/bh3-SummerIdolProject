@@ -13,7 +13,7 @@ const (
 
 func main() {
 	log.EnableLog(true)
-	pair(player.Mei, player.Durandal)
+	pair(player.Seele, player.Rita)
 }
 
 func pair(p1, p2 player.Candidate) {
