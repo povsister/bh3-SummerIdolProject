@@ -41,17 +41,35 @@ func (r *RitaRossweisse) RoundAttack(round uint16) {
 	}
 }
 
+func (r *RitaRossweisse) transformSkillAttackToNormal(round uint16, realDamage int16) {
+	trueDam := r.reduceDamage(round, realDamage)
+	r.Health -= trueDam
+	log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, trueDam)
+}
+
 func (r *RitaRossweisse) TakeDamage(round uint16, damage int16, times uint8, form AttackType) {
-	if round > 4 {
-		switch round % 4 {
-		case 1, 2:
-			if form == Skill || form == Unique {
-				// skill damage do not take effect
-				trueDam := r.reduceDamage(round, r.trueDamage(damage))
-				r.Health -= trueDam
-				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, trueDam)
-				log.HPStatus(r.Name, r.Health)
-				return
+	if r.isFirstToAttack() {
+		if round >= 4 {
+			switch round % 4 {
+			case 0, 1:
+				if form == Skill || form == Unique {
+					// skill damage do not take effect
+					r.transformSkillAttackToNormal(round, r.trueDamage(damage))
+					log.HPStatus(r.Name, r.Health)
+					return
+				}
+			}
+		}
+	} else {
+		if round > 4 {
+			switch round % 4 {
+			case 1, 2:
+				if form == Skill || form == Unique {
+					// skill damage do not take effect
+					r.transformSkillAttackToNormal(round, r.trueDamage(damage))
+					log.HPStatus(r.Name, r.Health)
+					return
+				}
 			}
 		}
 	}
@@ -62,16 +80,28 @@ func (r *RitaRossweisse) TakeDamage(round uint16, damage int16, times uint8, for
 }
 
 func (r *RitaRossweisse) DirectTakeDamage(round uint16, damage int16, times uint8, form AttackType) {
-	if round > 4 {
-		switch round % 4 {
-		case 1, 2:
-			if form == Skill || form == Unique {
-				// skill damage do not take effect
-				trueDam := r.reduceDamage(round, r.Rival.Attributes().Attack)
-				r.Health -= trueDam
-				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, trueDam)
-				log.HPStatus(r.Name, r.Health)
-				return
+	if r.isFirstToAttack() {
+		if round >= 4 {
+			switch round % 4 {
+			case 0, 1:
+				if form == Skill || form == Unique {
+					// skill damage do not take effect
+					r.transformSkillAttackToNormal(round, r.Rival.Attributes().Attack)
+					log.HPStatus(r.Name, r.Health)
+					return
+				}
+			}
+		}
+	} else {
+		if round > 4 {
+			switch round % 4 {
+			case 1, 2:
+				if form == Skill || form == Unique {
+					// skill damage do not take effect
+					r.transformSkillAttackToNormal(round, r.Rival.Attributes().Attack)
+					log.HPStatus(r.Name, r.Health)
+					return
+				}
 			}
 		}
 	}
@@ -132,14 +162,37 @@ func (r *RitaRossweisse) AffectDefence(round uint16, num int16, form AttackType)
 }
 
 func (r *RitaRossweisse) immunity(round uint16, form AttackType) bool {
-	return round > 4 && (round%4 == 1 || round%4 == 2) && (form == Skill || form == Unique)
+	if r.isFirstToAttack() {
+		return round >= 4 && (round%4 == 0 || round%4 == 1) && (form == Skill || form == Unique)
+	} else {
+		return round > 4 && (round%4 == 1 || round%4 == 2) && (form == Skill || form == Unique)
+	}
 }
 
 func (r *RitaRossweisse) CanIUseSkill(round uint16, skillName string) bool {
-	if round > 4 && (round%4 == 1 || round%4 == 2) {
-		// no effect
-		log.Print("%s 的 魅惑 生效! %s 当前回合无法使用技能 %s", r.Name, r.Rival.IdolName(), skillName)
-		return false
+	if r.isFirstToAttack() {
+		if round >= 4 && (round%4 == 0 || round%4 == 1) {
+			// no effect
+			log.Print("%s 的 魅惑 生效! %s 当前回合无法使用技能 %s", r.Name, r.Rival.IdolName(), skillName)
+		}
+	} else {
+		if round > 4 && (round%4 == 1 || round%4 == 2) {
+			// no effect
+			log.Print("%s 的 魅惑 生效! %s 当前回合无法使用技能 %s", r.Name, r.Rival.IdolName(), skillName)
+			return false
+		}
 	}
 	return true
+}
+
+func (r *RitaRossweisse) Reset() {
+	r.idol.Reset()
+	r.reduceDam = false
+}
+
+func (r *RitaRossweisse) isFirstToAttack() bool {
+	if r.Speed > r.Rival.Attributes().Speed {
+		return true
+	}
+	return false
 }
