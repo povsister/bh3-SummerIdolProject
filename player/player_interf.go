@@ -64,6 +64,8 @@ func (i *idol) ResetRound() {
 	i.hit = true
 }
 
+// tells the Rival if they can use skill on current round
+// must be called by rival
 func (i *idol) CanIUseSkill(round uint16, skillName string) bool {
 	return true
 }

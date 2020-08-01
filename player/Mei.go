@@ -32,7 +32,7 @@ func (m *RaidenMei) tryParalyze(round uint16) {
 	if !m.Rival.Attributes().hit {
 		return
 	}
-	if m.Rand(30) {
+	if m.Rand(30) && m.Rival.CanIUseSkill(round, "崩坏世界的歌姬!") {
 		log.Print("%s 成功麻痹对方一回合", m.Name)
 		m.Rival.Attributes().paralyzed = true
 	}
