@@ -213,7 +213,7 @@ var Players = map[Candidate]Player{
 		idol{Himeko, `姬子`, 100, 23, 9, 12, 100, nil, defaultIdolStatus},
 	},
 	Rita: &RitaRossweisse{
-		idol{Rita, `丽塔`, 100, 26, 11, 17, 100, nil, defaultIdolStatus},
+		idol{Rita, `丽塔`, 100, 26, 11, 17, 100, nil, defaultIdolStatus}, false,
 	},
 	Sakura: &YaeSakura{
 		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18, 100, nil, defaultIdolStatus},

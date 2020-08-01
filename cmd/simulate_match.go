@@ -8,12 +8,12 @@ import (
 )
 
 const (
-	simulateTimes = 100
+	simulateTimes = 1
 )
 
 func main() {
 	log.EnableLog(true)
-	pair(player.Durandal, player.Fuka)
+	pair(player.Rita, player.Theresa)
 }
 
 func pair(p1, p2 player.Candidate) {

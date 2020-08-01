@@ -6,6 +6,7 @@ import (
 
 type RitaRossweisse struct {
 	idol
+	reduceDam bool
 }
 
 func (r *RitaRossweisse) DeepCopy() Player {
@@ -20,16 +21,19 @@ func (r *RitaRossweisse) RoundAttack(round uint16) {
 	}
 	if round%4 == 0 {
 		log.Print("%s 发动技能 完美心意! 为对方回复 4 HP 并使对方下两个回合进入魅惑状态", r.Name)
+		r.reduceDam = true
 		r.Rival.AffectHealth(round, 4, Unique)
 		return
 	}
 	if r.Rand(35) {
-		damage := r.Rival.Attributes().trueDamage(r.Attack) - 3
-		if damage < 0 {
-			damage = 0
-		}
+		log.Print("%s 发动技能 女仆的温柔清理! 本次攻击伤害下降 3 点", r.Name)
+		damage := r.Rival.Attributes().trueDamage(r.Attack - 3)
 		log.Print("%s 普攻 造成 %d 点伤害", r.Name, damage)
-		r.Rival.DirectTakeDamage(round, damage, 1, Skill)
+		reduAtt := r.Attack - 3
+		if reduAtt < 0 {
+			reduAtt = 0
+		}
+		r.Rival.TakeDamage(round, reduAtt, 1, Skill)
 		r.Rival.AffectAttack(round, -4, Skill)
 	} else {
 		log.Print("%s 普攻 造成 %d 点伤害", r.Name, r.Rival.Attributes().trueDamage(r.Attack))
@@ -43,8 +47,9 @@ func (r *RitaRossweisse) TakeDamage(round uint16, damage int16, times uint8, for
 		case 1, 2:
 			if form == Skill || form == Unique {
 				// skill damage do not take effect
-				r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack-r.Defence)
-				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, r.reduceDamage(round, r.Rival.Attributes().Attack-r.Defence))
+				trueDam := r.reduceDamage(round, r.Rival.Attributes().Attack-r.Defence)
+				r.Health -= trueDam
+				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, trueDam)
 				return
 			}
 		}
@@ -61,8 +66,9 @@ func (r *RitaRossweisse) DirectTakeDamage(round uint16, damage int16, times uint
 		case 1, 2:
 			if form == Skill || form == Unique {
 				// skill damage do not take effect
-				r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack)
-				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, r.reduceDamage(round, r.Rival.Attributes().Attack))
+				trueDam := r.reduceDamage(round, r.Rival.Attributes().Attack)
+				r.Health -= trueDam
+				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, trueDam)
 				return
 			}
 		}
@@ -74,7 +80,7 @@ func (r *RitaRossweisse) DirectTakeDamage(round uint16, damage int16, times uint
 }
 
 func (r *RitaRossweisse) reduceDamage(round uint16, damage int16) int16 {
-	if round/4 >= 1 {
+	if round/4 >= 1 && r.reduceDam {
 		// damage * 40%
 		log.Print("%s 的 完美心意 生效! %s 的攻击伤害永久降低百分之60", r.Name, r.Rival.IdolName())
 		return int16(float64(damage) / 10 * 4)
