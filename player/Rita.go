@@ -41,8 +41,17 @@ func (r *RitaRossweisse) RoundAttack(round uint16) {
 	}
 }
 
-func (r *RitaRossweisse) transformSkillAttackToNormal(round uint16, realDamage int16) {
-	trueDam := r.reduceDamage(round, realDamage)
+func (r *RitaRossweisse) transformSkillAttackToNormal(round uint16, attack int16) {
+	var trueDam int16
+	switch r.Rival.NormalDamageType() {
+	case Physical:
+		trueDam = r.trueDamage(attack)
+	case Elemental:
+		trueDam = attack
+	default:
+		panic(`unknown DamageType`)
+	}
+	trueDam = r.reduceDamage(round, trueDam)
 	r.Health -= trueDam
 	log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, trueDam)
 }
@@ -54,7 +63,7 @@ func (r *RitaRossweisse) TakeDamage(round uint16, damage int16, times uint8, for
 			case 0, 1:
 				if form == Skill || form == Unique {
 					// skill damage do not take effect
-					r.transformSkillAttackToNormal(round, r.trueDamage(damage))
+					r.transformSkillAttackToNormal(round, r.Rival.Attributes().Attack)
 					log.HPStatus(r.Name, r.Health)
 					return
 				}
@@ -66,7 +75,7 @@ func (r *RitaRossweisse) TakeDamage(round uint16, damage int16, times uint8, for
 			case 1, 2:
 				if form == Skill || form == Unique {
 					// skill damage do not take effect
-					r.transformSkillAttackToNormal(round, r.trueDamage(damage))
+					r.transformSkillAttackToNormal(round, r.Rival.Attributes().Attack)
 					log.HPStatus(r.Name, r.Health)
 					return
 				}

@@ -6,6 +6,10 @@ type FuHua struct {
 	idol
 }
 
+func (f *FuHua) NormalDamageType() DamageType {
+	return Elemental
+}
+
 func (f *FuHua) DeepCopy() Player {
 	return &FuHua{
 		idol: f.deepCopyIdol(),
@@ -32,6 +36,7 @@ func (f *FuHua) TakeDamage(round uint16, damage int16, times uint8, form AttackT
 			f.Health -= f.trueDamage(damage)
 		} else {
 			log.Print("%s 避开了 %s 的 %d 点伤害", f.Name, f.Rival.IdolName(), f.trueDamage(damage))
+			log.HPStatus(f.Name, f.Health)
 			return
 		}
 	}
@@ -44,6 +49,7 @@ func (f *FuHua) DirectTakeDamage(round uint16, damage int16, times uint8, form A
 			f.Health -= damage
 		} else {
 			log.Print("%s 避开了 %s 的 %d 点伤害", f.Name, f.Rival.IdolName(), damage)
+			log.HPStatus(f.Name, f.Health)
 			return
 		}
 	}

@@ -14,10 +14,18 @@ type Player interface {
 	AffectDefence(round uint16, num int16, form AttackType)
 	AffectAccuracy(round uint16, num int16, form AttackType)
 	CanIUseSkill(round uint16, skillName string) bool
+	NormalDamageType() DamageType
 	ResetRound()
 	IsDead() bool
 	Reset()
 }
+
+type DamageType uint8
+
+const (
+	Physical DamageType = iota
+	Elemental
+)
 
 type idolStatus struct {
 	stunned   bool
@@ -41,6 +49,10 @@ type idol struct {
 	Accuracy int16 // 0 - 100  default 100
 	Rival    Player
 	idolStatus
+}
+
+func (i *idol) NormalDamageType() DamageType {
+	return Physical
 }
 
 func (i *idol) ResetRound() {
