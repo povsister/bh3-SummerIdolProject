@@ -22,7 +22,7 @@ func (r *RitaRossweisse) RoundAttack(round uint16) {
 	if round%4 == 0 {
 		log.Print("%s 发动技能 完美心意! 为对方回复 4 HP 并使对方下两个回合进入魅惑状态", r.Name)
 		r.reduceDam = true
-		r.Rival.AffectHealth(round, 4, Unique)
+		r.Rival.AffectAttr(attrHealth, round, 4, Skill)
 		return
 	}
 	if r.Rand(35) && r.Rival.CanIUseSkill(round, "女仆的温柔清理!") {
@@ -34,7 +34,7 @@ func (r *RitaRossweisse) RoundAttack(round uint16) {
 			reduAtt = 0
 		}
 		r.Rival.TakeDamage(round, reduAtt, 1, Skill)
-		r.Rival.AffectAttack(round, -4, Skill)
+		r.Rival.AffectAttr(attrAttack, round, -4, Skill)
 	} else {
 		log.Print("%s 普攻 造成 %d 点伤害", r.Name, r.Rival.Attributes().trueDamage(r.Attack))
 		r.Rival.TakeDamage(round, r.Attack, 1, Normal)
@@ -129,7 +129,40 @@ func (r *RitaRossweisse) reduceDamage(round uint16, damage int16) int16 {
 	return damage
 }
 
-func (r *RitaRossweisse) AffectAccuracy(round uint16, num int16, form AttackType) {
+func (r *RitaRossweisse) AffectAttr(aT attrType, round uint16, num int16, form AttackType) {
+	switch aT {
+	case attrHealth:
+		if r.hit {
+			r.affectHealth(round, num, form)
+		}
+	case attrAttack:
+		if r.hit {
+			r.affectAttack(round, num, form)
+		}
+	case attrDefence:
+		if r.hit {
+			r.affectDefence(round, num, form)
+		}
+	case attrAccuracy:
+		if r.hit {
+			r.affectAccuracy(round, num, form)
+		}
+	default:
+		panic(`unknown attrType`)
+	}
+}
+
+func (r *RitaRossweisse) affectHealth(round uint16, num int16, form AttackType) {
+	if r.immunity(round, form) {
+		// no effect
+		log.Print("%s 的 魅惑 生效! 免疫对方对己方生命值的影响", r.Name)
+		return
+	}
+	r.Health += num
+	log.AttributeStatus(r.Name, "生命值", num)
+}
+
+func (r *RitaRossweisse) affectAccuracy(round uint16, num int16, form AttackType) {
 	if r.immunity(round, form) {
 		// no effect
 		log.Print("%s 的 魅惑 生效! 免疫对方对己方命中率的影响", r.Name)
@@ -144,7 +177,7 @@ func (r *RitaRossweisse) AffectAccuracy(round uint16, num int16, form AttackType
 	log.AttributeStatus(r.Name, "命中率", num)
 }
 
-func (r *RitaRossweisse) AffectAttack(round uint16, num int16, form AttackType) {
+func (r *RitaRossweisse) affectAttack(round uint16, num int16, form AttackType) {
 	if r.immunity(round, form) {
 		// no effect
 		log.Print("%s 的 魅惑 生效! 免疫对方对己方攻击的影响", r.Name)
@@ -157,7 +190,7 @@ func (r *RitaRossweisse) AffectAttack(round uint16, num int16, form AttackType) 
 	log.AttributeStatus(r.Name, "攻击", num)
 }
 
-func (r *RitaRossweisse) AffectDefence(round uint16, num int16, form AttackType) {
+func (r *RitaRossweisse) affectDefence(round uint16, num int16, form AttackType) {
 	if r.immunity(round, form) {
 		// no effect
 		log.Print("%s 的 魅惑 生效! 免疫对方对己方防御的影响", r.Name)

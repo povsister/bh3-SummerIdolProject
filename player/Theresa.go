@@ -30,6 +30,6 @@ func (t *TheresaApocalypse) RoundAttack(round uint16) {
 func (t *TheresaApocalypse) tryWeakenRival(round uint16, form AttackType) {
 	if t.Rand(30) {
 		log.Print("%s 发动技能 血犹大第一可爱! 降低对方 5 点防御", t.Name)
-		t.Rival.AffectDefence(round, -5, form)
+		t.Rival.AffectAttr(attrDefence, round, -5, form)
 	}
 }

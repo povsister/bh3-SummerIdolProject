@@ -28,6 +28,10 @@ func (m *RaidenMei) RoundAttack(round uint16) {
 }
 
 func (m *RaidenMei) tryParalyze(round uint16) {
+	// only paralyze when rival got hit
+	if !m.Rival.Attributes().hit {
+		return
+	}
 	if m.Rand(30) {
 		log.Print("%s 成功麻痹对方一回合", m.Name)
 		m.Rival.Attributes().paralyzed = true

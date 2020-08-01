@@ -23,7 +23,7 @@ func (f *FuHua) RoundAttack(round uint16) {
 	if round%3 == 0 {
 		log.Print("%s 发动技能 形之笔墨! 造成 %d 点元素伤害", f.Name, 18)
 		f.Rival.DirectTakeDamage(round, 18, 1, Unique)
-		f.Rival.AffectAccuracy(round, -25, Unique)
+		f.Rival.AffectAttr(attrAccuracy, round, -25, Unique)
 		return
 	}
 	log.Print("%s 普攻 造成 %d 点元素伤害", f.Name, f.Attack)
@@ -31,28 +31,30 @@ func (f *FuHua) RoundAttack(round uint16) {
 }
 
 func (f *FuHua) TakeDamage(round uint16, damage int16, times uint8, form AttackType) {
+	escapedFromDamage := true
 	for k := 0; uint8(k) < times; k++ {
 		if f.isHit(round) {
 			f.Health -= f.trueDamage(damage)
+			escapedFromDamage = false
 		} else {
 			log.Print("%s 避开了 %s 的 %d 点伤害", f.Name, f.Rival.IdolName(), f.trueDamage(damage))
-			log.HPStatus(f.Name, f.Health)
-			return
 		}
 	}
+	f.hit = !escapedFromDamage
 	log.HPStatus(f.Name, f.Health)
 }
 
 func (f *FuHua) DirectTakeDamage(round uint16, damage int16, times uint8, form AttackType) {
+	escapedFromDamage := true
 	for k := 0; uint8(k) < times; k++ {
 		if f.isHit(round) {
 			f.Health -= damage
+			escapedFromDamage = false
 		} else {
 			log.Print("%s 避开了 %s 的 %d 点伤害", f.Name, f.Rival.IdolName(), damage)
-			log.HPStatus(f.Name, f.Health)
-			return
 		}
 	}
+	f.hit = !escapedFromDamage
 	log.HPStatus(f.Name, f.Health)
 }
 

@@ -12,10 +12,7 @@ type Player interface {
 	DeepCopy() Player
 	IdolName() string
 	Attributes() *idol
-	AffectHealth(round uint16, num int16, form AttackType)
-	AffectAttack(round uint16, num int16, form AttackType)
-	AffectDefence(round uint16, num int16, form AttackType)
-	AffectAccuracy(round uint16, num int16, form AttackType)
+	AffectAttr(aT attrType, round uint16, num int16, form AttackType)
 	CanIUseSkill(round uint16, skillName string) bool
 	NormalDamageType() DamageType
 	ResetRound()
@@ -51,6 +48,7 @@ type idol struct {
 	Speed    int16
 	Accuracy int16 // 0 - 100  default 100
 	Rival    Player
+	hit      bool // default true, indicates if player get hit by rival
 	idolStatus
 }
 
@@ -63,19 +61,52 @@ func (i *idol) NormalDamageType() DamageType {
 }
 
 func (i *idol) ResetRound() {
-	// default do nothing
+	i.hit = true
 }
 
 func (i *idol) CanIUseSkill(round uint16, skillName string) bool {
 	return true
 }
 
-func (i *idol) AffectHealth(round uint16, num int16, form AttackType) {
+type attrType uint8
+
+const (
+	attrHealth attrType = iota
+	attrAttack
+	attrDefence
+	attrAccuracy
+)
+
+// affect attribute. This method must called by the rival
+func (i *idol) AffectAttr(aT attrType, round uint16, num int16, form AttackType) {
+	switch aT {
+	case attrHealth:
+		if i.hit {
+			i.affectHealth(round, num, form)
+		}
+	case attrAttack:
+		if i.hit {
+			i.affectAttack(round, num, form)
+		}
+	case attrDefence:
+		if i.hit {
+			i.affectDefence(round, num, form)
+		}
+	case attrAccuracy:
+		if i.hit {
+			i.affectAccuracy(round, num, form)
+		}
+	default:
+		panic(`unknown attrType`)
+	}
+}
+
+func (i *idol) affectHealth(round uint16, num int16, form AttackType) {
 	i.Health += num
 	log.AttributeStatus(i.Name, `生命值`, num)
 }
 
-func (i *idol) AffectAttack(round uint16, num int16, form AttackType) {
+func (i *idol) affectAttack(round uint16, num int16, form AttackType) {
 	i.Attack += num
 	if i.Attack < 0 {
 		i.Attack = 0
@@ -83,7 +114,7 @@ func (i *idol) AffectAttack(round uint16, num int16, form AttackType) {
 	log.AttributeStatus(i.Name, `攻击`, num)
 }
 
-func (i *idol) AffectDefence(round uint16, num int16, form AttackType) {
+func (i *idol) affectDefence(round uint16, num int16, form AttackType) {
 	i.Defence += num
 	if i.Defence < 0 {
 		i.Defence = 0
@@ -91,7 +122,7 @@ func (i *idol) AffectDefence(round uint16, num int16, form AttackType) {
 	log.AttributeStatus(i.Name, `防御`, num)
 }
 
-func (i *idol) AffectAccuracy(round uint16, num int16, form AttackType) {
+func (i *idol) affectAccuracy(round uint16, num int16, form AttackType) {
 	i.Accuracy += num
 	if i.Accuracy < 0 {
 		i.Accuracy = 0
@@ -158,7 +189,8 @@ func (i *idol) DeepCopy() Player {
 func (i *idol) deepCopyIdol() idol {
 	return idol{
 		i.ID, i.Name, i.Health, i.Attack, i.Defence,
-		i.Speed, 100, i.Rival, idolStatus{false, false, false},
+		i.Speed, i.Accuracy, i.Rival, i.hit,
+		idolStatus{i.stunned, i.paralyzed, i.frozen},
 	}
 }
 
@@ -221,39 +253,39 @@ const (
 
 var Players = map[Candidate]Player{
 	Kiana: &KianaKaslana{
-		idol{Kiana, `琪亚娜`, 100, 24, 11, 23, 100, nil, defaultIdolStatus},
+		idol{Kiana, `琪亚娜`, 100, 24, 11, 23, 100, nil, true, defaultIdolStatus},
 	},
 	Mei: &RaidenMei{
-		idol{Mei, `芽衣`, 100, 22, 12, 30, 100, nil, defaultIdolStatus},
+		idol{Mei, `芽衣`, 100, 22, 12, 30, 100, nil, true, defaultIdolStatus},
 	},
 	Bronya: &BronyaZaychik{
-		idol{Bronya, `布洛妮娅`, 100, 21, 10, 20, 100, nil, defaultIdolStatus},
+		idol{Bronya, `布洛妮娅`, 100, 21, 10, 20, 100, nil, true, defaultIdolStatus},
 	},
 	Himeko: &MurataHimeko{
-		idol{Himeko, `姬子`, 100, 23, 9, 12, 100, nil, defaultIdolStatus},
+		idol{Himeko, `姬子`, 100, 23, 9, 12, 100, nil, true, defaultIdolStatus},
 	},
 	Rita: &RitaRossweisse{
-		idol{Rita, `丽塔`, 100, 26, 11, 17, 100, nil, defaultIdolStatus}, false,
+		idol{Rita, `丽塔`, 100, 26, 11, 17, 100, nil, true, defaultIdolStatus}, false,
 	},
 	Sakura: &YaeSakura{
-		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18, 100, nil, defaultIdolStatus},
+		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18, 100, nil, true, defaultIdolStatus},
 	},
 	Raven: &TheRaven{
-		idol{Raven, `渡鸦`, 100, 23, 14, 14, 100, nil, defaultIdolStatus},
+		idol{Raven, `渡鸦`, 100, 23, 14, 14, 100, nil, true, defaultIdolStatus},
 	},
 	Theresa: &TheresaApocalypse{
-		idol{Theresa, `德丽莎`, 100, 19, 12, 22, 100, nil, defaultIdolStatus},
+		idol{Theresa, `德丽莎`, 100, 19, 12, 22, 100, nil, true, defaultIdolStatus},
 	},
 	Twins: &TheTwins{
-		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, 100, nil, defaultIdolStatus}, false, false,
+		idol{Twins, `罗莎莉亚&莉莉娅`, 100, 18, 10, 10, 100, nil, true, defaultIdolStatus}, false, false,
 	},
 	Seele: &SeeleVollerei{
-		idol{Seele, `希儿`, 100, 23, 13, 26, 100, nil, defaultIdolStatus}, WhiteSeele,
+		idol{Seele, `希儿`, 100, 23, 13, 26, 100, nil, true, defaultIdolStatus}, WhiteSeele,
 	},
 	Durandal: &BiankaAtaegina{
-		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15, 100, nil, defaultIdolStatus}, nil,
+		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15, 100, nil, true, defaultIdolStatus}, nil, false,
 	},
 	Fuka: &FuHua{
-		idol{Fuka, `符华`, 100, 17, 15, 16, 100, nil, defaultIdolStatus},
+		idol{Fuka, `符华`, 100, 17, 15, 16, 100, nil, true, defaultIdolStatus},
 	},
 }
