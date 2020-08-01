@@ -25,7 +25,7 @@ func (r *RitaRossweisse) RoundAttack(round uint16) {
 		r.Rival.AffectHealth(round, 4, Unique)
 		return
 	}
-	if r.Rand(35) {
+	if r.Rand(35) && r.Rival.CanIUseSkill(round, "女仆的温柔清理!") {
 		log.Print("%s 发动技能 女仆的温柔清理! 本次攻击伤害下降 3 点", r.Name)
 		damage := r.Rival.Attributes().trueDamage(r.Attack - 3)
 		log.Print("%s 普攻 造成 %d 点伤害", r.Name, damage)
@@ -47,15 +47,16 @@ func (r *RitaRossweisse) TakeDamage(round uint16, damage int16, times uint8, for
 		case 1, 2:
 			if form == Skill || form == Unique {
 				// skill damage do not take effect
-				trueDam := r.reduceDamage(round, r.Rival.Attributes().Attack-r.Defence)
+				trueDam := r.reduceDamage(round, r.trueDamage(damage))
 				r.Health -= trueDam
 				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, trueDam)
+				log.HPStatus(r.Name, r.Health)
 				return
 			}
 		}
 	}
 	for k := 0; uint8(k) < times; k++ {
-		r.Health -= r.reduceDamage(round, damage-r.Defence)
+		r.Health -= r.reduceDamage(round, r.trueDamage(damage))
 	}
 	log.HPStatus(r.Name, r.Health)
 }
@@ -69,6 +70,7 @@ func (r *RitaRossweisse) DirectTakeDamage(round uint16, damage int16, times uint
 				trueDam := r.reduceDamage(round, r.Rival.Attributes().Attack)
 				r.Health -= trueDam
 				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, trueDam)
+				log.HPStatus(r.Name, r.Health)
 				return
 			}
 		}
