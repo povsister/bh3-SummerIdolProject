@@ -42,6 +42,7 @@ func (a *arena) StartMatch(ch chan *MatchResult) {
 	a.Rivals[0].Attributes().Rival = a.Rivals[1]
 	a.Rivals[1].Attributes().Rival = a.Rivals[0]
 	for i := 1; i <= a.simulateTimes; i++ {
+		log.Print("===== 比赛开始 =====")
 		for {
 			log.Print("===== 回合 %d 开始 =====", a.Round)
 			// must call attacker first
@@ -64,6 +65,8 @@ func (a *arena) StartMatch(ch chan *MatchResult) {
 			log.Print("===== 回合 %d 结束 =====", a.Round)
 			// no one died, continue to the next round
 			a.NextRound()
+			attacker.ResetRound() // reset player round status
+			defender.ResetRound()
 		}
 	}
 }
@@ -83,10 +86,13 @@ func (a *arena) CheckResult(ch chan *MatchResult, ps ...player.Player) bool {
 				ps[1-i].Attributes().ID,
 			}
 			log.Print("%s 死亡", p.IdolName())
+			log.Print("%s Wins !", ps[1-i].IdolName())
 			// reset arena and rivals status
 			a.Reset()
 			a.Rivals[0].Reset()
 			a.Rivals[1].Reset()
+			a.Rivals[1].ResetRound() // reset player round status
+			a.Rivals[0].ResetRound()
 			ch <- result
 			return true
 		}

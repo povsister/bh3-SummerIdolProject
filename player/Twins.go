@@ -50,7 +50,7 @@ func (t *TheTwins) DirectTakeDamage(round uint16, damage int16, times uint8, for
 // check if been revived or not
 // also check if need revive
 func (t *TheTwins) tryRevive(round uint16) {
-	if !t.revived && t.Health <= 0 && t.Rival.CanUseSkill(round, "96度生命之水!") {
+	if !t.revived && t.Health <= 0 && t.Rival.CanIUseSkill(round, "96度生命之水!") {
 		t.revived = true
 		t.charged = true
 		t.Health = 20

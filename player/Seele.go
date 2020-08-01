@@ -32,7 +32,9 @@ func (s *SeeleVollerei) RoundAttack(round uint16) {
 	} else {
 		s.current = WhiteSeele
 		log.Print("%s 转换为白色形态!", s.Name)
-		s.AffectHealth(round, s.RandNum(15), Normal)
+		rndHeal := s.RandNum(15)
+		s.Health += rndHeal
+		log.Print("%s 的生命值上升了 %d 点", s.Name, rndHeal)
 		log.Print("白色%s 普攻 造成 %d 点伤害", s.Name, s.Rival.Attributes().trueDamage(s.Attack))
 		s.Rival.TakeDamage(round, s.Attack, 1, Normal)
 	}

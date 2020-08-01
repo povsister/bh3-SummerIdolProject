@@ -13,7 +13,8 @@ type Player interface {
 	AffectAttack(round uint16, num int16, form AttackType)
 	AffectDefence(round uint16, num int16, form AttackType)
 	AffectAccuracy(round uint16, num int16, form AttackType)
-	CanUseSkill(round uint16, skillName string) bool
+	CanIUseSkill(round uint16, skillName string) bool
+	ResetRound()
 	IsDead() bool
 	Reset()
 }
@@ -42,7 +43,11 @@ type idol struct {
 	idolStatus
 }
 
-func (i *idol) CanUseSkill(round uint16, skillName string) bool {
+func (i *idol) ResetRound() {
+	// default do nothing
+}
+
+func (i *idol) CanIUseSkill(round uint16, skillName string) bool {
 	return true
 }
 
@@ -80,8 +85,9 @@ func (i *idol) AffectAccuracy(round uint16, num int16, form AttackType) {
 type AttackType uint8
 
 const (
-	Normal AttackType = iota
-	Unique
+	Normal AttackType = iota // normal attack
+	Skill                    // typical skill
+	Unique                   // unique skill
 )
 
 func (i *idol) RoundAttack(round uint16) {
@@ -225,7 +231,7 @@ var Players = map[Candidate]Player{
 		idol{Seele, `希儿`, 100, 23, 13, 26, 100, nil, defaultIdolStatus}, WhiteSeele,
 	},
 	Durandal: &BiankaAtaegina{
-		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15, 100, nil, defaultIdolStatus},
+		idol{Durandal, `幽兰黛尔`, 100, 19, 10, 15, 100, nil, defaultIdolStatus}, nil,
 	},
 	Fuka: &FuHua{
 		idol{Fuka, `符华`, 100, 17, 15, 16, 100, nil, defaultIdolStatus},

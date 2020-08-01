@@ -21,14 +21,14 @@ func (h *MurataHimeko) RoundAttack(round uint16) {
 		log.Print("%s 的命中率为0! 攻击不可能命中", h.Name)
 		return
 	}
-	if round%2 == 0 && h.Rival.CanUseSkill(round, "干杯,朋友!") {
+	if round%2 == 0 && h.Rival.CanIUseSkill(round, "干杯,朋友!") {
 		if h.Rand(h.Accuracy) {
 			log.Print("%s 发动技能 干杯,朋友! 造成 %d 点伤害", h.Name, h.getRealDamage(2*h.Attack))
-			h.Rival.DirectTakeDamage(round, h.getRealDamage(2*h.Attack), 1, Unique)
+			h.Rival.DirectTakeDamage(round, h.getRealDamage(2*h.Attack), 1, Skill)
 		} else {
 			log.Print("%s 发动技能 干杯,朋友! 可惜未能命中", h.Name)
 		}
-		h.AffectAccuracy(round, -35, Unique)
+		h.AffectAccuracy(round, -35, Skill)
 		return
 	}
 	if h.Rand(h.Accuracy) {

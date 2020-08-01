@@ -26,6 +26,6 @@ func (b *BronyaZaychik) RoundAttack(round uint16) {
 	b.Rival.TakeDamage(round, b.Attack, 1, Normal)
 	if b.Rand(25) {
 		log.Print("%s 钻头攻击 造成 4 x %d 点伤害", b.Name, b.Rival.Attributes().trueDamage(12))
-		b.Rival.TakeDamage(round, 12, 4, Normal)
+		b.Rival.TakeDamage(round, 12, 4, Skill)
 	}
 }

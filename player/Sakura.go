@@ -16,7 +16,7 @@ func (s *YaeSakura) RoundAttack(round uint16) {
 	if s.tryRecover() {
 		return
 	}
-	if s.Rand(30) && s.Rival.CanUseSkill(round, "八重樱的饭团!") {
+	if s.Rand(30) && s.Rival.CanIUseSkill(round, "八重樱的饭团!") {
 		log.Print("%s 发动技能 八重樱的饭团! 回复自身 25 HP", s.Name)
 		s.Health += 25
 	}

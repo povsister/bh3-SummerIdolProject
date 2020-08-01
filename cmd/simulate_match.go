@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"povsister.app/bh3/summer-idol/arena"
 	"povsister.app/bh3/summer-idol/log"
 	"povsister.app/bh3/summer-idol/player"
@@ -9,12 +8,12 @@ import (
 )
 
 const (
-	simulateTimes = 1
+	simulateTimes = 100
 )
 
 func main() {
 	log.EnableLog(true)
-	pair(player.Himeko, player.Rita)
+	pair(player.Durandal, player.Fuka)
 }
 
 func pair(p1, p2 player.Candidate) {
@@ -30,10 +29,9 @@ func pair(p1, p2 player.Candidate) {
 	}()
 
 	for {
-		res, ok := <-resultChan
+		_, ok := <-resultChan
 		if !ok {
 			break
 		}
-		fmt.Println(player.Players[res.Winner].IdolName(), "Wins !")
 	}
 }

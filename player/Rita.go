@@ -27,8 +27,8 @@ func (r *RitaRossweisse) RoundAttack(round uint16) {
 			damage = 0
 		}
 		log.Print("%s 普攻 造成 %d 点伤害", r.Name, damage)
-		r.Rival.DirectTakeDamage(round, damage, 1, Normal)
-		r.Rival.AffectAttack(round, -4, Unique)
+		r.Rival.DirectTakeDamage(round, damage, 1, Skill)
+		r.Rival.AffectAttack(round, -4, Skill)
 	} else {
 		log.Print("%s 普攻 造成 %d 点伤害", r.Name, r.Rival.Attributes().trueDamage(r.Attack))
 		r.Rival.TakeDamage(round, r.Attack, 1, Normal)
@@ -39,7 +39,7 @@ func (r *RitaRossweisse) TakeDamage(round uint16, damage int16, times uint8, for
 	if round > 4 {
 		switch round % 4 {
 		case 1, 2:
-			if form == Unique {
+			if form == Skill {
 				// skill damage do not take effect
 				r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack-r.Defence)
 				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, r.reduceDamage(round, r.Rival.Attributes().Attack-r.Defence))
@@ -57,7 +57,7 @@ func (r *RitaRossweisse) DirectTakeDamage(round uint16, damage int16, times uint
 	if round > 4 {
 		switch round % 4 {
 		case 1, 2:
-			if form == Unique {
+			if form == Skill {
 				// skill damage do not take effect
 				r.Health -= r.reduceDamage(round, r.Rival.Attributes().Attack)
 				log.Print("%s 的 魅惑 生效! 对方技能变为普通攻击造成 %d 点伤害", r.Name, r.reduceDamage(round, r.Rival.Attributes().Attack))
@@ -81,7 +81,7 @@ func (r *RitaRossweisse) reduceDamage(round uint16, damage int16) int16 {
 }
 
 func (r *RitaRossweisse) AffectAccuracy(round uint16, num int16, form AttackType) {
-	if round > 4 && (round%4 == 1 || round%4 == 2) && form == Unique {
+	if round > 4 && (round%4 == 1 || round%4 == 2) && form == Skill {
 		// no effect
 		log.Print("%s 的 魅惑 生效! 免疫对方对己方命中率的影响", r.Name)
 		return
@@ -96,7 +96,7 @@ func (r *RitaRossweisse) AffectAccuracy(round uint16, num int16, form AttackType
 }
 
 func (r *RitaRossweisse) AffectAttack(round uint16, num int16, form AttackType) {
-	if round > 4 && (round%4 == 1 || round%4 == 2) && form == Unique {
+	if round > 4 && (round%4 == 1 || round%4 == 2) && form == Skill {
 		// no effect
 		log.Print("%s 的 魅惑 生效! 免疫对方对己方攻击的影响", r.Name)
 		return
@@ -109,7 +109,7 @@ func (r *RitaRossweisse) AffectAttack(round uint16, num int16, form AttackType) 
 }
 
 func (r *RitaRossweisse) AffectDefence(round uint16, num int16, form AttackType) {
-	if round > 4 && (round%4 == 1 || round%4 == 2) && form == Unique {
+	if round > 4 && (round%4 == 1 || round%4 == 2) && form == Skill {
 		// no effect
 		log.Print("%s 的 魅惑 生效! 免疫对方对己方防御的影响", r.Name)
 		return
@@ -121,7 +121,7 @@ func (r *RitaRossweisse) AffectDefence(round uint16, num int16, form AttackType)
 	log.AttributeStatus(r.Name, "防御", num)
 }
 
-func (r *RitaRossweisse) CanUseSkill(round uint16, skillName string) bool {
+func (r *RitaRossweisse) CanIUseSkill(round uint16, skillName string) bool {
 	if round > 4 && (round%4 == 1 || round%4 == 2) {
 		// no effect
 		log.Print("%s 的 魅惑 生效! %s 当前回合无法使用技能 %s", r.Name, r.Rival.IdolName(), skillName)

@@ -32,6 +32,7 @@ func (f *FuHua) TakeDamage(round uint16, damage int16, times uint8, form AttackT
 			f.Health -= f.trueDamage(damage)
 		} else {
 			log.Print("%s 避开了 %s 的 %d 点伤害", f.Name, f.Rival.IdolName(), f.trueDamage(damage))
+			return
 		}
 	}
 	log.HPStatus(f.Name, f.Health)
@@ -43,6 +44,7 @@ func (f *FuHua) DirectTakeDamage(round uint16, damage int16, times uint8, form A
 			f.Health -= damage
 		} else {
 			log.Print("%s 避开了 %s 的 %d 点伤害", f.Name, f.Rival.IdolName(), damage)
+			return
 		}
 	}
 	log.HPStatus(f.Name, f.Health)
