@@ -124,7 +124,7 @@ func (r *RitaRossweisse) reduceDamage(round uint16, damage int16) int16 {
 	if round/4 >= 1 && r.reduceDam {
 		// damage * 40%
 		log.Print("%s 的 完美心意 生效! %s 的攻击伤害永久降低百分之60", r.Name, r.Rival.IdolName())
-		return int16(float64(damage) / 10 * 4)
+		return roundDamage(float64(damage) / 10 * 4)
 	}
 	return damage
 }

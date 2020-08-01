@@ -1,6 +1,9 @@
 package player
 
-import "povsister.app/bh3/summer-idol/log"
+import (
+	"math"
+	"povsister.app/bh3/summer-idol/log"
+)
 
 type Player interface {
 	RoundAttack(uint16)
@@ -49,6 +52,10 @@ type idol struct {
 	Accuracy int16 // 0 - 100  default 100
 	Rival    Player
 	idolStatus
+}
+
+func roundDamage(dam float64) int16 {
+	return int16(math.Round(dam))
 }
 
 func (i *idol) NormalDamageType() DamageType {

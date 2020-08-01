@@ -28,10 +28,10 @@ func (r *TheRaven) RoundAttack(round uint16) {
 func (r *TheRaven) finalDamage(damage int16) int16 {
 	if r.Rival.Attributes().ID == Kiana {
 		// 125%
-		return int16(float64(damage) / 100 * 125)
+		return roundDamage(float64(damage) / 100 * 125)
 	}
 	if r.Rand(25) {
-		return int16(float64(damage) / 100 * 125)
+		return roundDamage(float64(damage) / 100 * 125)
 	}
 	return damage
 }
