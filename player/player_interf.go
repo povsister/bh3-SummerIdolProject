@@ -204,7 +204,8 @@ func (i *idol) Reset() {
 type Candidate uint8
 
 const (
-	Kiana Candidate = iota
+	_ Candidate = iota
+	Kiana
 	Mei
 	Bronya
 	Himeko

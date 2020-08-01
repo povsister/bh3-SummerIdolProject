@@ -4,9 +4,9 @@ Simulation of the bh3 summer idol battle
 
 ## To simulate
 
-1. Open the `cmd/simulate_match.go`
-2. Change the pair of `pair(player.Himeko, player.Rita)`
-3. Build and run `simulate_match.go`
+1. Build and run `cmd/simulate/simulate_match.go`
+2. Input P1 and P2
+3. You will get the result
 
 <details><summary><strong>Example: 符华 vs 幽兰黛尔 模拟战 日志</strong></summary>
 <pre>
