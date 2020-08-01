@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	st "github.com/alexeyco/simpletable"
+	"sort"
 	"sync"
 
 	"povsister.app/bh3/summer-idol/arena"
@@ -28,6 +29,7 @@ func main() {
 			go matchPair(playerSlice[i], playerSlice[k], &mu, &table.Body.Cells, &wg)
 		}
 	}
+
 	table.Header = &st.Header{
 		Cells: []*st.Cell{
 			{Text: `对战双方`, Align: st.AlignLeft},
@@ -35,8 +37,9 @@ func main() {
 			{Text: `结果2(获胜)`, Align: st.AlignLeft},
 		},
 	}
-	table.SetStyle(st.StyleMarkdown)
 	wg.Wait()
+	sort.Sort(table.Body)
+	table.SetStyle(st.StyleMarkdown)
 	fmt.Println(table.String())
 }
 
