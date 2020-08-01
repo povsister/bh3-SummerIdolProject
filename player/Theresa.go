@@ -16,7 +16,7 @@ func (t *TheresaApocalypse) RoundAttack(round uint16) {
 	if t.tryRecover() {
 		return
 	}
-	if round%3 == 0 {
+	if round%3 == 0 && t.Rival.CanIUseSkill(round, "在线踢人!") {
 		log.Print("%s 发动技能 在线踢人! 造成 5 x %d 点伤害", t.Name, t.Rival.Attributes().trueDamage(16))
 		t.Rival.TakeDamage(round, 16, 5, Unique)
 		t.tryWeakenRival(round, Unique)
@@ -28,7 +28,7 @@ func (t *TheresaApocalypse) RoundAttack(round uint16) {
 }
 
 func (t *TheresaApocalypse) tryWeakenRival(round uint16, form AttackType) {
-	if t.Rand(30) {
+	if t.Rand(30) && t.Rival.CanIUseSkill(round, "血犹大第一可爱!") {
 		log.Print("%s 发动技能 血犹大第一可爱! 降低对方 5 点防御", t.Name)
 		t.Rival.AffectAttr(attrDefence, round, -5, form)
 	}

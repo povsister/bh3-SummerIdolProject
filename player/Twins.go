@@ -19,7 +19,7 @@ func (t *TheTwins) RoundAttack(round uint16) {
 		return
 	}
 	// is the skill charged after revived
-	if t.revived && t.charged {
+	if t.revived && t.charged && t.Rival.CanIUseSkill(round, "变成星星吧!") {
 		if t.Rand(50) {
 			log.Print("%s 发动技能 变成星星吧! 造成 %d 点伤害", t.Name, t.Rival.Attributes().trueDamage(233))
 			t.Rival.TakeDamage(round, 233, 1, Unique)

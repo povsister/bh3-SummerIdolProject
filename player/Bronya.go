@@ -16,7 +16,7 @@ func (b *BronyaZaychik) RoundAttack(round uint16) {
 	if b.tryRecover() {
 		return
 	}
-	if round%3 == 0 {
+	if round%3 == 0 && b.Rival.CanIUseSkill(round, "摩托拜客哒!") {
 		num := b.RandNum(100)
 		log.Print("%s 发动技能 摩托拜客哒! 造成 %d 点元素伤害", b.Name, num)
 		b.Rival.DirectTakeDamage(round, num, 1, Unique)

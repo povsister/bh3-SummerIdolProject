@@ -63,8 +63,10 @@ func (d *BiankaAtaegina) RoundAttack(round uint16) {
 		// reset the frozen/stunned/paralyzed status
 		d.resetStatus()
 	}
-	d.Attack += 3
-	log.Print("%s 的攻击上升了 3 点", d.Name)
+	if d.Rival.CanIUseSkill(round, "摸鱼的快乐!") {
+		d.Attack += 3
+		log.Print("%s 的攻击上升了 3 点", d.Name)
+	}
 	log.Print("%s 普攻 造成 %d 点伤害", d.Name, d.Rival.Attributes().trueDamage(d.Attack))
 	d.Rival.TakeDamage(round, d.Attack, 1, Normal)
 }

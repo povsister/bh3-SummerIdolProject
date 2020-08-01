@@ -16,7 +16,7 @@ func (r *TheRaven) RoundAttack(round uint16) {
 	if r.tryRecover() {
 		return
 	}
-	if round%3 == 0 {
+	if round%3 == 0 && r.Rival.CanIUseSkill(round, "别墅小岛!") {
 		trueDam := r.finalDamage(r.Rival.Attributes().trueDamage(16))
 		log.Print("%s 发动技能 别墅小岛! 造成 7 x %d 点伤害", r.Name, trueDam)
 		r.Rival.DirectTakeDamage(round, trueDam, 7, Unique)

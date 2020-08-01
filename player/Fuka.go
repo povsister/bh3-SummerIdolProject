@@ -20,7 +20,7 @@ func (f *FuHua) RoundAttack(round uint16) {
 	if f.tryRecover() {
 		return
 	}
-	if round%3 == 0 {
+	if round%3 == 0 && f.Rival.CanIUseSkill(round, "形之笔墨!") {
 		log.Print("%s 发动技能 形之笔墨! 造成 %d 点元素伤害", f.Name, 18)
 		f.Rival.DirectTakeDamage(round, 18, 1, Unique)
 		f.Rival.AffectAttr(attrAccuracy, round, -25, Unique)

@@ -16,7 +16,7 @@ func (m *RaidenMei) RoundAttack(round uint16) {
 	if m.tryRecover() {
 		return
 	}
-	if round%2 == 0 {
+	if round%2 == 0 && m.Rival.CanIUseSkill(round, "雷电家的龙女仆!") {
 		log.Print("%s 发动技能 雷电家的龙女仆! 造成 5 x 3 点元素伤害", m.Name)
 		m.Rival.DirectTakeDamage(round, 3, 5, Unique)
 		m.tryParalyze(round)
