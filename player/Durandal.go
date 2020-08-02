@@ -34,8 +34,14 @@ func (d *BiankaAtaegina) isFightingBack(form AttackType) bool {
 }
 
 func (d *BiankaAtaegina) DeepCopy() Player {
+	var ret *bool
+	if d.fightBack != nil {
+		tmp := false
+		ret = &tmp
+		*ret = *d.fightBack
+	}
 	return &BiankaAtaegina{
-		idol: d.deepCopyIdol(), fightBack: nil, fightBackAtLastRound: false,
+		idol: d.deepCopyIdol(), fightBack: ret, fightBackAtLastRound: d.fightBackAtLastRound,
 	}
 }
 

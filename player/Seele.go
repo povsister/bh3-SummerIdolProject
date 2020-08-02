@@ -16,7 +16,7 @@ type SeeleVollerei struct {
 
 func (s *SeeleVollerei) DeepCopy() Player {
 	return &SeeleVollerei{
-		idol: s.deepCopyIdol(), current: WhiteSeele,
+		idol: s.deepCopyIdol(), current: s.current,
 	}
 }
 

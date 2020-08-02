@@ -10,7 +10,7 @@ type TheTwins struct {
 
 func (t *TheTwins) DeepCopy() Player {
 	return &TheTwins{
-		idol: t.deepCopyIdol(),
+		idol: t.deepCopyIdol(), revived: t.revived, charged: t.charged,
 	}
 }
 

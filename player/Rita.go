@@ -11,7 +11,7 @@ type RitaRossweisse struct {
 
 func (r *RitaRossweisse) DeepCopy() Player {
 	return &RitaRossweisse{
-		idol: r.deepCopyIdol(),
+		idol: r.deepCopyIdol(), reduceDam: r.reduceDam,
 	}
 }
 
@@ -216,6 +216,7 @@ func (r *RitaRossweisse) CanIUseSkill(round uint16, skillName string) bool {
 		if round >= 4 && (round%4 == 0 || round%4 == 1) {
 			// no effect
 			log.Print("%s 的 魅惑 生效! %s 当前回合无法使用技能 %s", r.Name, r.Rival.IdolName(), skillName)
+			return false
 		}
 	} else {
 		if round > 4 && (round%4 == 1 || round%4 == 2) {
