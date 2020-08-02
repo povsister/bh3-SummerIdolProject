@@ -43,6 +43,8 @@ func (a *arena) StartMatch(ch chan *MatchResult) {
 	a.Rivals[1].Attributes().Rival = a.Rivals[0]
 	for i := 1; i <= a.simulateTimes; i++ {
 		log.Print("===== 比赛开始 =====")
+		a.Rivals[0].PreBattle(0) // do something before battle
+		a.Rivals[1].PreBattle(0)
 		for {
 			log.Print("===== 回合 %d 开始 =====", a.Round)
 			// must call attacker first
@@ -91,8 +93,6 @@ func (a *arena) CheckResult(ch chan *MatchResult, ps ...player.Player) bool {
 			a.Reset()
 			a.Rivals[0].Reset()
 			a.Rivals[1].Reset()
-			a.Rivals[1].ResetRound() // reset player round status
-			a.Rivals[0].ResetRound()
 			ch <- result
 			return true
 		}

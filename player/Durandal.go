@@ -8,6 +8,12 @@ type BiankaAtaegina struct {
 	fightBackAtLastRound bool
 }
 
+func (d *BiankaAtaegina) Reset() {
+	d.idol.Reset()
+	d.fightBack = nil
+	d.fightBackAtLastRound = false
+}
+
 func (d *BiankaAtaegina) ResetRound() {
 	d.idol.ResetRound()
 	if d.fightBack != nil && *d.fightBack {

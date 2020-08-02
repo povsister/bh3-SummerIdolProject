@@ -6,7 +6,8 @@ import (
 )
 
 type Player interface {
-	RoundAttack(uint16)
+	PreBattle(round uint16)
+	RoundAttack(round uint16)
 	TakeDamage(round uint16, damage int16, times uint8, form AttackType)
 	DirectTakeDamage(round uint16, damage int16, times uint8, form AttackType)
 	DeepCopy() Player
@@ -50,6 +51,10 @@ type idol struct {
 	Rival    Player
 	hit      bool // default true, indicates if player get hit by rival
 	idolStatus
+}
+
+func (i *idol) PreBattle(round uint16) {
+	// default nothing
 }
 
 func roundDamage(dam float64) int16 {
@@ -273,7 +278,7 @@ var Players = map[Candidate]Player{
 		idol{Sakura, `八重樱&卡莲`, 100, 20, 9, 18, 100, nil, true, defaultIdolStatus},
 	},
 	Raven: &TheRaven{
-		idol{Raven, `渡鸦`, 100, 23, 14, 14, 100, nil, true, defaultIdolStatus},
+		idol{Raven, `渡鸦`, 100, 23, 14, 14, 100, nil, true, defaultIdolStatus}, false,
 	},
 	Theresa: &TheresaApocalypse{
 		idol{Theresa, `德丽莎`, 100, 19, 12, 22, 100, nil, true, defaultIdolStatus},
