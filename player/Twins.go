@@ -31,8 +31,8 @@ func (t *TheTwins) RoundAttack(round uint16) {
 		return
 	}
 	// normal attack
-	t.Rival.TakeDamage(round, t.Attack, 1, Normal)
 	log.Print("%s 普攻 造成 %d 点伤害", t.Name, t.Rival.Attributes().trueDamage(t.Attack))
+	t.Rival.TakeDamage(round, t.Attack, 1, Normal)
 }
 
 func (t *TheTwins) TakeDamage(round uint16, damage int16, times uint8, form AttackType) {
