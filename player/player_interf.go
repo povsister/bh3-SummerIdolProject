@@ -136,7 +136,7 @@ func (i *idol) affectAttack(round uint16, num int16, form AttackType) {
 
 func (i *idol) affectDefence(round uint16, num int16, form AttackType) {
 	i.Defence += num
-	i.Defence = notLessZero(i.Defence)
+	//i.Defence = notLessZero(i.Defence)
 	log.AttributeStatus(i.Name, `防御`, num)
 }
 

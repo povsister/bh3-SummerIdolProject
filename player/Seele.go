@@ -33,7 +33,7 @@ func (s *SeeleVollerei) RoundAttack(round uint16) {
 			log.Print("%s 的防御下降了 5 点!", s.Name)
 			s.Attack += 10
 			s.Defence -= 5
-			s.Defence = notLessZero(s.Defence)
+			//s.Defence = notLessZero(s.Defence)
 		}
 		s.roundAttack(round, s.current)
 	case BlackSeele:
