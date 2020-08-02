@@ -84,6 +84,20 @@ const (
 	attrAccuracy
 )
 
+func notLessZero(num int16) int16 {
+	if num < 0 {
+		return 0
+	}
+	return num
+}
+
+func notGreater100(num int16) int16 {
+	if num > 100 {
+		return 100
+	}
+	return num
+}
+
 // affect attribute. This method must called by the rival
 func (i *idol) AffectAttr(aT attrType, round uint16, num int16, form AttackType) {
 	switch aT {
@@ -110,32 +124,26 @@ func (i *idol) AffectAttr(aT attrType, round uint16, num int16, form AttackType)
 
 func (i *idol) affectHealth(round uint16, num int16, form AttackType) {
 	i.Health += num
+	i.Health = notGreater100(i.Health)
 	log.AttributeStatus(i.Name, `生命值`, num)
 }
 
 func (i *idol) affectAttack(round uint16, num int16, form AttackType) {
 	i.Attack += num
-	if i.Attack < 0 {
-		i.Attack = 0
-	}
+	i.Attack = notLessZero(i.Attack)
 	log.AttributeStatus(i.Name, `攻击`, num)
 }
 
 func (i *idol) affectDefence(round uint16, num int16, form AttackType) {
 	i.Defence += num
-	if i.Defence < 0 {
-		i.Defence = 0
-	}
+	i.Defence = notLessZero(i.Defence)
 	log.AttributeStatus(i.Name, `防御`, num)
 }
 
 func (i *idol) affectAccuracy(round uint16, num int16, form AttackType) {
 	i.Accuracy += num
-	if i.Accuracy < 0 {
-		i.Accuracy = 0
-	} else if i.Accuracy > 100 {
-		i.Accuracy = 100
-	}
+	i.Accuracy = notLessZero(i.Accuracy)
+	i.Accuracy = notGreater100(i.Accuracy)
 	log.AttributeStatus(i.Name, `命中率`, num)
 }
 

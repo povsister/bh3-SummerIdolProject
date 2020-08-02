@@ -26,9 +26,7 @@ func (h *MurataHimeko) RoundAttack(round uint16) {
 		log.Print("%s 发动技能 干杯,朋友! 使自己攻击力翻倍", h.Name)
 		h.Accuracy -= 35
 		log.Print("%s 的命中率下降 35 点", h.Name)
-		if h.Accuracy < 0 {
-			h.Accuracy = 0
-		}
+		h.Accuracy = notLessZero(h.Accuracy)
 		if h.Rand(h.Accuracy) {
 			log.Print("%s 发动技能 干杯,朋友! 造成 %d 点伤害", h.Name, h.getRealDamage(h.Attack))
 			h.Rival.DirectTakeDamage(round, h.getRealDamage(h.Attack), 1, Skill)

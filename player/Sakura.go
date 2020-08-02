@@ -19,6 +19,7 @@ func (s *YaeSakura) RoundAttack(round uint16) {
 	if s.Rand(30) && s.Rival.CanIUseSkill(round, "八重樱的饭团!") {
 		log.Print("%s 发动技能 八重樱的饭团! 回复自身 25 HP", s.Name)
 		s.Health += 25
+		s.Health = notGreater100(s.Health)
 	}
 	if round%2 == 0 && s.Rival.CanIUseSkill(round, "卡莲的饭团!") {
 		log.Print("%s 发动技能 卡莲的饭团! 造成 25 点元素伤害", s.Name)

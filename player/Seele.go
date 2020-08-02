@@ -33,9 +33,7 @@ func (s *SeeleVollerei) RoundAttack(round uint16) {
 			log.Print("%s 的防御下降了 5 点!", s.Name)
 			s.Attack += 10
 			s.Defence -= 5
-			if s.Defence < 0 {
-				s.Defence = 0
-			}
+			s.Defence = notLessZero(s.Defence)
 		}
 		s.roundAttack(round, s.current)
 	case BlackSeele:
@@ -44,14 +42,13 @@ func (s *SeeleVollerei) RoundAttack(round uint16) {
 			log.Print("%s 转换为白色形态!", s.Name)
 			rndHeal := s.RandNum(15)
 			s.Health += rndHeal
+			s.Health = notGreater100(s.Health)
 			log.Print("%s 的生命值上升了 %d 点", s.Name, rndHeal)
 			log.Print("%s 的攻击下降了 10 点!", s.Name)
 			log.Print("%s 的防御上升了 5 点!", s.Name)
 			s.Attack -= 10
 			s.Defence += 5
-			if s.Attack < 0 {
-				s.Attack = 0
-			}
+			s.Attack = notLessZero(s.Attack)
 		}
 		s.roundAttack(round, s.current)
 	default:
