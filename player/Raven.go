@@ -21,10 +21,10 @@ func (r *TheRaven) DeepCopy() Player {
 func (r *TheRaven) PreBattle(round uint16) {
 	if r.Rival.Attributes().ID == Kiana {
 		r.increaseDam = true
-		log.Print("%s 针对%s发动技能 不是针对你! 本场比赛造成的伤害提升25%", r.Name, r.Rival.IdolName())
+		log.Print("%s 针对%s发动技能 不是针对你! 本场比赛造成的伤害提升百分之25", r.Name, r.Rival.IdolName())
 	} else if r.Rand(25) {
 		r.increaseDam = true
-		log.Print("%s 发动技能 不是针对你! 本场比赛造成的伤害提升25%", r.Name)
+		log.Print("%s 发动技能 不是针对你! 本场比赛造成的伤害提升百分之25", r.Name)
 	}
 }
 
